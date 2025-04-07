@@ -1,10 +1,18 @@
 /* GENERAL CSS */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
+}
+
+element.style {
+    animation-duration: 1500ms;
+    transition-duration: 1500ms;
+    animation-delay: 300ms;
+    transition-delay: 300ms;
+    width: 100%;
 }
 
 html {
@@ -29,8 +37,8 @@ img {
 }
 
 .logo {
-    width: 80px;
-    height: 80px;
+  width: 80px;
+  height: 80px;
 }
 
 a {
@@ -71,16 +79,21 @@ button:active {
 }
 
 h1 {
-    font-size: 56px;
-    color: #7342d6;
-    margin-bottom: 24px;
-    text-align: center;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #7342d6;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 h2 {
-    font-size: 32px;
-    text-align: center;
-    margin: 0 200px;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #0a1f44;
+  margin-bottom: 80px;
+  text-align: center;
 }
 
 /* Navigation */
@@ -171,6 +184,45 @@ h2 {
 
 /* Header */
 
+/* Input */
+input {
+  background-color: #fff;
+  border-radius: 20px;
+  border: 1px solid #0a1f44;
+  color: #0a1f44;
+  display: inline-block;
+  height: 70px;
+  line-height: 40px;
+  outline: none;
+  padding: 0 15px;
+  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  width: 100%;
+  font-size: 24px;
+  padding-left: 25px;
+}
+
+.input__wrapper {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.input__button {
+  width: 200px;
+  margin-left: 20px;
+  font-size: 40px;
+  color: #fff;
+  border-radius: 20px;
+  transition: all 0.25sease;
+}
+
+.input__button--not-loading {
+  border: 1px solid #6030b1;
+  background-color: #6030b1;
+  box-shadow: 7px 7px 14px rgba(134, 93, 204, 0.3);
+  cursor: pointer;
+}
 
 /* SMALL PHONES, TABLETS, LARGE SMARTPHONES */
 @media (max-width: 768px) {
