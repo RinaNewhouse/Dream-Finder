@@ -193,13 +193,14 @@ h2 {
 .nav__link--primary {
   background-color: var(--primary-color);
   color: white !important;
-  padding: 12px 28px;
+  padding: 14px 32px;
   border-radius: 50px;
   transition: all 300ms ease;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .nav__link--primary:hover {
@@ -252,7 +253,12 @@ h2 {
 }
 
 .btn__menu {
-    display: none;
+  background-color: transparent;
+  border: none;
+  color: var(--text-color);
+  font-size: 24px;
+  display: none;
+  cursor: pointer;
 }
 
 .btn__menu--close {
@@ -275,13 +281,26 @@ h2 {
 
 input {
   width: 100%;
-  padding: 16px 24px;
+  padding: 0 24px;
+  height: 60px;
   font-size: 20px;
   font-weight: 500;
   border: 2px solid #e0e0e0;
   border-radius: 50px;
   transition: all 300ms ease;
   outline: none;
+  display: flex;
+  align-items: center;
+  line-height: normal;
+}
+
+input::placeholder {
+  color: #666;
+  opacity: 0.8;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  line-height: 1.2;
 }
 
 input:focus {
@@ -324,29 +343,107 @@ input:focus {
     padding: 0 24px;
   }
 
-  .logo {
-    margin-left: -20px;
-  }
-
   h1 {
     font-size: 56px;
   }
 
   h2 {
     font-size: 28px;
+    padding: 0 20px;
   }
 
-  button {
+  .input__wrapper {
+    width: 90%;
+  }
+
+  input {
     font-size: 18px;
-  }
-
-  .book {
-    width: 50%;
   }
 }
 
-/* SMALL PHONES, LARGE SMARTPHONES */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 48px;
+    padding: 0 16px;
+  }
+
+  h2 {
+    font-size: 24px;
+    padding: 0 24px;
+    line-height: 1.4;
+  }
+
+  .input__wrapper {
+    width: 92%;
+  }
+
+  input {
+    padding: 14px 20px;
+    font-size: 16px;
+  }
+
+  .input__button {
+    width: 100px;
+  }
+
+  .nav__link {
+    margin-left: 12px;
+    font-size: 16px;
+  }
+
+  .logo {
+    width: 60px;
+    height: 60px;
+  }
+}
+
 @media (max-width: 550px) {
+  h1 {
+    font-size: 36px;
+    padding: 0 12px;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: 20px;
+    padding: 0 16px;
+    margin-bottom: 30px;
+  }
+
+  .input__wrapper {
+    width: 94%;
+  }
+
+  input {
+    padding: 0 60px 0 20px;
+    font-size: 14px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    line-height: normal;
+  }
+
+  input::placeholder {
+    font-size: 14px;
+    white-space: pre-line;
+    word-wrap: break-word;
+    max-width: 70%;
+    line-height: 1.2;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .input__button {
+    width: 50px;
+    height: calc(100% - 8px);
+    right: 4px;
+  }
+
+  .input__button i {
+    font-size: 20px;
+  }
+
   .btn__menu {
     display: block;
   }
@@ -355,12 +452,13 @@ input:focus {
     display: none;
   }
 
-  .highlight {
-    width: 100%;
+  .logo {
+    margin-left: 0;
+    padding: 8px;
   }
 
-  .highlight:not(:last-child) {
-    margin-bottom: 24px;
+  .nav__container {
+    padding: 0 16px;
   }
 }
 
