@@ -14,29 +14,34 @@
 [data-theme="light"] {
   --primary-color: #7342d6;
   --primary-color-hover: #6030b1;
-  --accent-color: #5c2bb3;
-  --text-color: #1a1a2e;
+  --accent-color: #7342d6;
+  --text-color: white;
   --background-color: transparent;
   --input-border: #e0e0e0;
-  --overlay-color: rgba(255, 255, 255, 0.6);
+  --overlay-color: rgba(255, 255, 255, 0.169);
 }
 
 [data-theme="light"] h1 {
-  text-shadow: 2px 2px 4px rgba(115, 66, 214, 0.15);
-  color: #2d2d3f;
+  text-shadow: 2px 2px 4px rgba(45, 45, 63, 0.3),
+               0 0 25px rgba(115, 66, 214, 0.2);
+  color: white;
 }
 
 [data-theme="light"] h2 {
-  text-shadow: 1px 1px 3px rgba(115, 66, 214, 0.1);
-  color: #3a3a55;
+  text-shadow: 1px 1px 3px rgba(45, 45, 63, 0.25),
+               0 0 20px rgba(115, 66, 214, 0.15);
+  color: white;
 }
 
 [data-theme="light"] .nav__link {
-  color: #2d2d3f;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(45, 45, 63, 0.2);
 }
 
 [data-theme="light"] .purple {
-  text-shadow: 1px 1px 3px rgba(115, 66, 214, 0.2);
+  color: #9b75e4;
+  text-shadow: 2px 2px 4px rgba(45, 45, 63, 0.25),
+               0 0 15px rgba(115, 66, 214, 0.2);
 }
 
 * {
@@ -408,9 +413,18 @@ input:focus {
 }
 
 .theme-toggle:hover {
-  transform: scale(1.1);
+  transform: scale(1.2);
+  text-decoration: none;
+}
+
+.theme-toggle.nav__link:hover {
+  text-decoration: none;
 }
 
 [data-theme="light"] .logo {
-  filter: brightness(0.2);
+  filter: brightness(0) invert(1);
+}
+
+[data-theme="light"] #myVideo {
+  filter: blur(2px);
 }
