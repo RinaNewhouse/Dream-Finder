@@ -24,7 +24,7 @@
                 <img class="logo" src="https://img.icons8.com/?size=100&id=jzQY4eVfPyZz&format=png&color=000000" alt="">
                 <ul class="nav__links">
                     <li><a href="#" class="nav__link">Home</a></li>
-                    <li><a href="./movies.html" class="nav__link">Find Movies</a></li>
+                    <li><a href="movies.html?search=all%20movies" class="nav__link">Find Movies</a></li>
                     <li><a href="#" class="nav__link nav__link--primary">Contact</a></li>
                     <li>
                         <button class="theme-toggle nav__link" onclick="toggleTheme()">
@@ -44,7 +44,7 @@
                             <a href="#" class="menu__link" onclick="closeMenu()">Home</a>
                         </li>
                         <li class="menu__list">
-                            <a href="./movies.html" class="menu__link" onclick="closeMenu()">Find Movies</a>
+                            <a href="movies.html?search=all%20movies" class="menu__link" onclick="closeMenu()">Find Movies</a>
                         </li>
                         <li class="menu__list">
                             <a href="#" class="menu__link" onclick="closeMenu()">Contact</a>
@@ -62,11 +62,37 @@
             </div>
         </header>
         <div class="input__wrapper">
-            <input type="text" placeholder="Search by Genre, Keyword, or Rating" autocomplete="off" translate="no" data-form-type="other">
-            <button class="input__button input__button--not-loading">
-                <i class="fa-solid fa-search"></i>
-            </button>
+            <form id="searchForm" onsubmit="handleSearch(event)">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search by Genre, Keyword, or Rating" 
+                    autocomplete="off" 
+                    translate="no" 
+                    data-form-type="other"
+                >
+                <button type="submit" class="input__button input__button--not-loading">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </form>
         </div>
     </section>
+
+    <script>
+    function handleSearch(event) {
+        event.preventDefault();
+        const searchInput = document.getElementById('searchInput');
+        const searchQuery = searchInput.value.trim();
+        
+        if (searchQuery) {
+            window.location.href = `movies.html?search=${encodeURIComponent(searchQuery)}`;
+        } else {
+            searchInput.focus();
+        }
+    }
+
+    // Add click handler for the search button
+    document.querySelector('.input__button').addEventListener('click', handleSearch);
+    </script>
 </body>
 </html>

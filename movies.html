@@ -3,9 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>DreamFinder — Movie Results</title>
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/?size=100&id=jzQY4eVfPyZz&format=png&color=000000">
+    <link rel="stylesheet" href="style.css">
+    <script src="movies.js" defer></script>
+    <script src="https://kit.fontawesome.com/42d214a21a.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    
+    <nav>
+        <div class="nav__container">
+            <img class="logo" src="https://img.icons8.com/?size=100&id=jzQY4eVfPyZz&format=png&color=000000" alt="">
+            <ul class="nav__links">
+                <li><a href="index.html" class="nav__link">Home</a></li>
+                <li><a href="movies.html?search=all%20movies" class="nav__link">Find Movies</a></li>
+                <li><a href="#" class="nav__link nav__link--primary">Contact</a></li>
+                <li>
+                    <button class="theme-toggle nav__link" onclick="toggleTheme()">
+                        <i class="fa-regular fa-sun"></i>
+                    </button>
+                </li>
+            </ul>
+            <button class="btn__menu" onclick="openMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="menu__backdrop">
+                <button class="btn__menu btn__menu--close" onclick="closeMenu()">
+                    <i class="fa-duotone fa-solid fa-xmark"></i>
+                </button>
+                <ul class="menu__links">
+                    <li class="menu__list">
+                        <a href="index.html" class="menu__link" onclick="closeMenu()">Home</a>
+                    </li>
+                    <li class="menu__list">
+                        <a href="movies.html?search=all%20movies" class="menu__link" onclick="closeMenu()">Find Movies</a>
+                    </li>
+                    <li class="menu__list">
+                        <a href="#" class="menu__link" onclick="closeMenu()">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="movies">
+        <div class="container">
+            <div class="row">
+                <div class="movies__header">
+                    <h2>Search Results</h2>
+                    <div class="movies__search">
+                        <div class="search__wrapper">
+                            <input 
+                                type="text" 
+                                id="movieSearch" 
+                                placeholder="Search for movies..."
+                                class="search__input"
+                            >
+                            <button class="search__button" id="searchButton">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="movies__filters">
+                        <select id="moviesPerPage" class="filter__select">
+                            <option value="20">Show 20</option>
+                            <option value="40">Show 40</option>
+                            <option value="60">Show 60</option>
+                            <option value="80">Show 80</option>
+                            <option value="all">Show All</option>
+                        </select>
+                        <select id="genreFilter" class="filter__select">
+                            <option value="">All Genres</option>
+                            <option value="action">Action</option>
+                            <option value="adventure">Adventure</option>
+                            <option value="comedy">Comedy</option>
+                            <option value="drama">Drama</option>
+                            <option value="horror">Horror</option>
+                            <option value="thriller">Thriller</option>
+                        </select>
+                        <select id="ratingFilter" class="filter__select">
+                            <option value="">All Ratings</option>
+                            <option value="9">9+ Rating</option>
+                            <option value="8">8+ Rating</option>
+                            <option value="7">7+ Rating</option>
+                            <option value="6">6+ Rating</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="movies__loading">
+                    <i class="fas fa-spinner movies__loading--spinner"></i>
+                </div>
+                <div class="movies__list">
+                    <!-- Movies will be dynamically inserted here -->
+                </div>
+                <div class="movies__pagination">
+                    <button class="pagination__btn" id="prevPage" disabled>
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <div class="pagination__numbers">
+                        <!-- Page numbers will be dynamically inserted here -->
+                    </div>
+                    <button class="pagination__btn" id="nextPage">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 </html>
