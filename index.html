@@ -1,12 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DreamFinder — Find Your Dream Movie Today</title>
     <link rel="icon" type="image/x-icon" href="https://img.icons8.com/?size=100&id=jzQY4eVfPyZz&format=png&color=000000">
+    <style>
+        html {
+            background-color: #000;
+        }
+        body {
+            background-color: transparent;
+        }
+    </style>
     <link rel="stylesheet" href="style.css">
+    <script>
+        // Set initial theme before page loads
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+    </script>
     <script src="index.js"></script>
     <script src="https://kit.fontawesome.com/42d214a21a.js" crossorigin="anonymous"></script>
 </head>
@@ -27,7 +42,7 @@
                     <li><a href="movies.html?search=all%20movies" class="nav__link">Find Movies</a></li>
                     <li><a href="#" class="nav__link nav__link--primary">Contact</a></li>
                     <li>
-                        <button class="theme-toggle nav__link" onclick="toggleTheme()">
+                        <button class="theme-toggle nav__link">
                             <i class="fa-regular fa-sun"></i>
                         </button>
                     </li>
@@ -76,6 +91,7 @@
                 </button>
             </form>
         </div>
+        <a href="movies.html" class="see-all-btn">See All Movies</a>
     </section>
 
     <script>

@@ -3,25 +3,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const themeToggle = document.querySelector('.theme-toggle');
     const html = document.documentElement;
 
-    // Set initial theme
+    // Check for saved theme preference or use preferred color scheme
     const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
     if (savedTheme) {
         html.setAttribute('data-theme', savedTheme);
     } else {
-        html.setAttribute('data-theme', 'dark');
+        html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
     }
 
     // Update theme toggle icon
     function updateThemeIcon() {
         const currentTheme = html.getAttribute('data-theme');
-        const icon = themeToggle.querySelector('i');
-        if (currentTheme === 'light') {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-        } else {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-        }
+        themeToggle.innerHTML = currentTheme === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
     }
 
     // Initial icon update
@@ -39,13 +34,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add click event listener
     themeToggle.addEventListener('click', toggleTheme);
-});
-
-// Menu functionality
-function openMenu() {
-    document.body.classList.add('menu--open');
-}
-
-function closeMenu() {
-    document.body.classList.remove('menu--open');
-} 
+}); 
