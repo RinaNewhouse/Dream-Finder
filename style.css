@@ -593,6 +593,68 @@ input:focus {
   }
 }
 
+@media (max-width: 200px) {
+  h1 {
+    font-size: 20px;
+    padding: 0 4px;
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 12px;
+    padding: 0 6px;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .input__wrapper {
+    width: 98%;
+    margin-top: 12px;
+    margin-bottom: 16px;
+  }
+
+  input {
+    padding: 0 32px 0 8px;
+    font-size: 11px;
+    height: 40px;
+  }
+
+  input::placeholder {
+    font-size: 11px;
+    max-width: 85%;
+  }
+
+  .input__button {
+    width: 28px;
+    height: calc(100% - 4px);
+    right: 2px;
+  }
+
+  .input__button i {
+    font-size: 12px;
+  }
+
+  .logo {
+    width: 30px;
+    height: 30px;
+    padding: 4px;
+  }
+
+  .nav__container {
+    padding: 0 6px;
+  }
+
+  nav {
+    height: 50px;
+    margin-bottom: 12px;
+  }
+
+  .btn__menu {
+    font-size: 14px;
+    padding: 4px;
+  }
+}
+
 #landing {
   position: relative;
   height: 100vh;
