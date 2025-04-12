@@ -319,6 +319,7 @@ function hideLoading() {
 // Event listeners
 genreFilter.addEventListener('change', filterMovies);
 ratingFilter.addEventListener('change', filterMovies);
+yearFilter.addEventListener('change', filterMovies);
 moviesPerPageSelect.addEventListener('change', updateMoviesPerPage);
 prevPageBtn.addEventListener('click', prevPage);
 nextPageBtn.addEventListener('click', nextPage);
