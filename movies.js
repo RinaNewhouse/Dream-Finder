@@ -20,7 +20,7 @@ const paginationNumbers = document.querySelector('.pagination__numbers');
 let movies = [];
 let filteredMovies = [];
 let currentPage = 1;
-let moviesPerPage = 20;
+let moviesPerPage = 10;
 let totalPages = 1;
 
 // Search functionality
