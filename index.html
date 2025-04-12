@@ -24,6 +24,7 @@
     </script>
     <script src="index.js"></script>
     <script src="https://kit.fontawesome.com/42d214a21a.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 
 <body>
@@ -40,7 +41,7 @@
                 <ul class="nav__links">
                     <li><a href="#" class="nav__link">Home</a></li>
                     <li><a href="movies.html?search=all%20movies" class="nav__link">Find Movies</a></li>
-                    <li><a href="#" class="nav__link nav__link--primary">Contact</a></li>
+                    <li><a href="#" class="nav__link nav__link--primary" onclick="openContactForm()">Contact</a></li>
                     <li>
                         <button class="theme-toggle nav__link">
                             <i class="fa-regular fa-sun"></i>
@@ -71,7 +72,7 @@
         <header>
             <div class="header__container">
                 <div class="header__description">
-                    <h1>The World's BEST Way to Find Movies</h1>
+                    <h1>The <span class="purple">World's BEST Way</span> to Find Movies</h1>
                     <h2>End the pre-movie-picking fights today, with a <span class="purple">tailored approach</span> to decide <span class="purple">your perfect flick</span> that <span class="purple">everyone</span> will love.</h2>
                 </div>
             </div>
@@ -94,21 +95,106 @@
         <a href="movies.html" class="see-all-btn">See All Movies</a>
     </section>
 
-    <script>
-    function handleSearch(event) {
-        event.preventDefault();
-        const searchInput = document.getElementById('searchInput');
-        const searchQuery = searchInput.value.trim();
-        
-        if (searchQuery) {
-            window.location.href = `movies.html?search=${encodeURIComponent(searchQuery)}`;
-        } else {
-            searchInput.focus();
-        }
-    }
+    <!-- Contact Form Modal -->
+    <div class="contact__modal" id="contactModal">
+        <div class="contact__modal-content">
+            <button class="contact__close-btn" onclick="closeContactForm()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2>Contact Us</h2>
+            <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                <div class="form__group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form__group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form__group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="contact__submit-btn">Send Message</button>
+            </form>
+        </div>
+    </div>
 
-    // Add click handler for the search button
-    document.querySelector('.input__button').addEventListener('click', handleSearch);
+    <script>
+        // Initialize EmailJS with your public key
+        (function() {
+            emailjs.init("XZiqXvXGUZ2WaKUne");
+        })();
+
+        function handleSearch(event) {
+            event.preventDefault();
+            const searchInput = document.getElementById('searchInput');
+            const searchQuery = searchInput.value.trim();
+            
+            if (searchQuery) {
+                window.location.href = `movies.html?search=${encodeURIComponent(searchQuery)}`;
+            } else {
+                searchInput.focus();
+            }
+        }
+
+        // Add click handler for the search button
+        document.querySelector('.input__button').addEventListener('click', handleSearch);
+
+        // Contact Form Functions
+        function openContactForm() {
+            document.getElementById('contactModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContactForm() {
+            document.getElementById('contactModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            
+            // Get form data
+            const form = event.target;
+            const formData = {
+                from_name: form.name.value,
+                from_email: form.email.value,
+                message: form.message.value
+            };
+
+            // Show loading state
+            const submitBtn = form.querySelector('.contact__submit-btn');
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+
+            // Send email using EmailJS
+            emailjs.send('service_7xmu46e', 'template_s0uio9z', formData)
+                .then(() => {
+                    // Show success message
+                    alert('Thank you for your message! We will get back to you soon.');
+                    closeContactForm();
+                    form.reset();
+                })
+                .catch((error) => {
+                    // Show error message
+                    alert('Sorry, there was an error sending your message. Please try again later.');
+                    console.error('Email sending error:', error);
+                })
+                .finally(() => {
+                    // Reset button state
+                    submitBtn.textContent = 'Send Message';
+                    submitBtn.disabled = false;
+                });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('contactModal');
+            if (event.target == modal) {
+                closeContactForm();
+            }
+        }
     </script>
 </body>
 </html>
