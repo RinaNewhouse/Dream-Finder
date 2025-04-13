@@ -304,11 +304,18 @@ h2 {
     flex-direction: column;
     align-items: center;
     gap: 2rem;
-    padding: 2rem;
+    padding: 3rem;
+    background-color: var(--background-color);
+    border-radius: 12px;
+    position: relative;
+    width: 90%;
+    max-width: 400px;
 }
 
 .menu__list {
     list-style: none;
+    width: 100%;
+    text-align: center;
 }
 
 .menu__link {
@@ -316,11 +323,17 @@ h2 {
     font-size: 1.5rem;
     font-weight: 600;
     text-decoration: none;
-    transition: color 300ms ease;
+    transition: all 300ms ease;
+    padding: 1rem 2rem;
+    display: block;
+    width: 100%;
+    border-radius: 8px;
 }
 
 .menu__link:hover {
-    color: var(--primary-color);
+    color: white;
+    background-color: var(--primary-color);
+    text-decoration: none;
 }
 
 .btn__menu {
@@ -332,6 +345,7 @@ h2 {
     cursor: pointer;
     padding: 0.5rem;
     z-index: 101;
+    position: relative;
 }
 
 .btn__menu--close {
@@ -339,6 +353,18 @@ h2 {
     top: 1rem;
     right: 1rem;
     font-size: 2rem;
+    z-index: 102;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: all 300ms ease;
+}
+
+.btn__menu--close:hover {
+    transform: rotate(90deg);
+    color: var(--primary-color);
 }
 
 @media (max-width: 1200px) {
@@ -358,38 +384,24 @@ h2 {
         display: flex;
     }
 
-    .menu__links {
-        width: 100%;
-        max-width: 400px;
-        background-color: var(--background-color);
-        border-radius: 12px;
-        padding: 3rem 2rem;
-        position: relative;
-    }
-
-    .menu__link {
-        font-size: 1.25rem;
-        padding: 0.5rem 1rem;
-        display: block;
-        text-align: center;
-        width: 100%;
-    }
-
-    .menu__link:hover {
-        background-color: var(--primary-color);
-        color: white;
-        border-radius: 8px;
+    .menu__backdrop.show ~ .btn__menu {
+        display: none;
     }
 }
 
 @media (max-width: 480px) {
     .menu__links {
-        padding: 2rem 1rem;
+        padding: 2.5rem 1.5rem;
     }
 
     .menu__link {
-        font-size: 1.1rem;
-        padding: 0.5rem;
+        font-size: 1.25rem;
+        padding: 0.75rem 1.5rem;
+    }
+
+    .btn__menu--close {
+        top: 0.75rem;
+        right: 0.75rem;
     }
 }
 
