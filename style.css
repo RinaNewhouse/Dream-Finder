@@ -299,6 +299,17 @@ h2 {
     backdrop-filter: blur(5px);
 }
 
+.menu__backdrop.show {
+    display: flex;
+}
+
+.menu__backdrop.show ~ .btn__menu,
+.menu__backdrop.show + .btn__menu {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
 .menu__links {
     display: flex;
     flex-direction: column;
@@ -344,8 +355,9 @@ h2 {
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0.5rem;
-    z-index: 101;
+    z-index: 99;
     position: relative;
+    transition: visibility 0.3s, opacity 0.3s;
 }
 
 .btn__menu--close {
@@ -384,8 +396,11 @@ h2 {
         display: flex;
     }
 
+    /* Hide burger menu when backdrop is shown */
+    .menu__backdrop.show + .btn__menu,
     .menu__backdrop.show ~ .btn__menu {
-        display: none;
+        visibility: hidden;
+        opacity: 0;
     }
 }
 
