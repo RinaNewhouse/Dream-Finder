@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="movies.js" defer></script>
     <script src="https://kit.fontawesome.com/42d214a21a.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
     <nav>
@@ -121,5 +122,34 @@
             </div>
         </div>
     </section>
+
+    <script>
+        // Initialize EmailJS with your public key
+        (function() {
+            emailjs.init("XZiqXvXGUZ2WaKUne");
+        })();
+
+        // Burger Menu Functions
+        function openMenu() {
+            document.querySelector('.menu__backdrop').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            document.querySelector('.menu__backdrop').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close menu when clicking outside
+        window.onclick = function(event) {
+            const menu = document.querySelector('.menu__backdrop');
+            if (event.target === menu) {
+                closeMenu();
+            }
+        }
+
+        // Contact Form Functions
+        // ... existing code ...
+    </script>
 </body>
 </html>
