@@ -126,6 +126,25 @@
             emailjs.init("XZiqXvXGUZ2WaKUne");
         })();
 
+        // Burger Menu Functions
+        function openMenu() {
+            document.querySelector('.menu__backdrop').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            document.querySelector('.menu__backdrop').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close menu when clicking outside
+        window.onclick = function(event) {
+            const menu = document.querySelector('.menu__backdrop');
+            if (event.target === menu) {
+                closeMenu();
+            }
+        }
+
         function handleSearch(event) {
             event.preventDefault();
             const searchInput = document.getElementById('searchInput');

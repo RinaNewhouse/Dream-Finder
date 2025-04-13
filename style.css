@@ -331,6 +331,7 @@ h2 {
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0.5rem;
+    z-index: 101;
 }
 
 .btn__menu--close {
@@ -340,7 +341,7 @@ h2 {
     font-size: 2rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
     .nav__links {
         display: none;
     }
