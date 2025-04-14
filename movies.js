@@ -409,5 +409,30 @@ function generateStarRating(rating) {
     return starsHTML;
 }
 
+// Burger menu functionality
+const menuBtn = document.querySelector('.btn__menu');
+const menuBackdrop = document.querySelector('.menu__backdrop');
+const closeMenuBtn = document.querySelector('.btn__menu--close');
+
+function openMenu() {
+    menuBackdrop.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMenu() {
+    menuBackdrop.classList.remove('show');
+    document.body.style.overflow = 'auto';
+}
+
+menuBtn.addEventListener('click', openMenu);
+closeMenuBtn.addEventListener('click', closeMenu);
+
+// Close menu when clicking outside
+menuBackdrop.addEventListener('click', (e) => {
+    if (e.target === menuBackdrop) {
+        closeMenu();
+    }
+});
+
 // Initialize the page
 init();

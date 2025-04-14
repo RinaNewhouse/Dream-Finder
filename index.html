@@ -42,15 +42,15 @@
                     <li><a href="#" class="nav__link">Home</a></li>
                     <li><a href="movies.html?search=all%20movies" class="nav__link">Find Movies</a></li>
                     <li><a href="#" class="nav__link nav__link--primary" onclick="openContactForm()">Contact</a></li>
-                    <li>
-                        <button class="theme-toggle nav__link">
-                            <i class="fa-regular fa-sun"></i>
-                        </button>
-                    </li>
                 </ul>
-                <button class="btn__menu" onclick="openMenu()">
-                    <i class="fas fa-bars"></i>
-                </button>
+                <div class="nav__buttons">
+                    <button class="theme-toggle nav__button" onclick="toggleTheme()">
+                        <i class="fa-regular fa-sun"></i>
+                    </button>
+                    <button class="btn__menu" onclick="openMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
                 <div class="menu__backdrop">
                     <button class="btn__menu btn__menu--close" onclick="closeMenu()">
                         <i class="fa-duotone fa-solid fa-xmark"></i>
@@ -63,7 +63,7 @@
                             <a href="movies.html?search=all%20movies" class="menu__link" onclick="closeMenu()">Find Movies</a>
                         </li>
                         <li class="menu__list">
-                            <a href="#" class="menu__link" onclick="closeMenu()">Contact</a>
+                            <a href="#" class="menu__link" onclick="openContactForm(); closeMenu()">Contact</a>
                         </li>
                     </ul>
                 </div>
@@ -126,11 +126,40 @@
             emailjs.init("XZiqXvXGUZ2WaKUne");
         })();
 
-        // Burger Menu Functions
+        // Theme Toggle Function
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            // Update all theme toggle icons
+            const themeIcons = document.querySelectorAll('.theme-toggle i');
+            themeIcons.forEach(icon => {
+                icon.className = newTheme === 'light' ? 'fa-regular fa-moon' : 'fa-regular fa-sun';
+            });
+        }
+
+        // Set initial theme icon
+        function setInitialThemeIcon() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const themeIcons = document.querySelectorAll('.theme-toggle i');
+            themeIcons.forEach(icon => {
+                icon.className = currentTheme === 'light' ? 'fa-regular fa-moon' : 'fa-regular fa-sun';
+            });
+        }
+
+        // Call setInitialThemeIcon when the page loads
+        document.addEventListener('DOMContentLoaded', setInitialThemeIcon);
+
+        // Call setInitialThemeIcon when the menu opens (to ensure burger menu icon is correct)
         function openMenu() {
             const backdrop = document.querySelector('.menu__backdrop');
             backdrop.classList.add('show');
             document.body.style.overflow = 'hidden';
+            setInitialThemeIcon();
         }
 
         function closeMenu() {

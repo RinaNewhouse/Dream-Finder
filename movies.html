@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DreamFinder — Movie Results</title>
     <link rel="icon" type="image/x-icon" href="https://img.icons8.com/?size=100&id=jzQY4eVfPyZz&format=png&color=000000">
+    <style>
+        html {
+            background-color: #000;
+        }
+        body {
+            background-color: transparent;
+        }
+    </style>
+    <script>
+        // Set initial theme before page loads
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+    </script>
     <link rel="stylesheet" href="style.css">
     <script src="movies.js" defer></script>
     <script src="https://kit.fontawesome.com/42d214a21a.js" crossorigin="anonymous"></script>
@@ -18,33 +33,29 @@
                 <li><a href="index.html" class="nav__link">Home</a></li>
                 <li><a href="movies.html?search=all%20movies" class="nav__link">Find Movies</a></li>
                 <li><a href="#" class="nav__link nav__link--primary">Contact</a></li>
-                <li>
-                    <button class="theme-toggle nav__link" onclick="toggleTheme()">
-                        <i class="fa-regular fa-sun"></i>
-                    </button>
-                </li>
             </ul>
-            <button class="btn__menu" onclick="openMenu()">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="menu__backdrop">
-                <button class="btn__menu btn__menu--close" onclick="closeMenu()">
-                    <i class="fa-duotone fa-solid fa-xmark"></i>
+            <div class="nav__buttons">
+                <button class="theme-toggle nav__button" onclick="toggleTheme()">
+                    <i class="fa-regular fa-sun"></i>
                 </button>
-                <ul class="menu__links">
-                    <li class="menu__list">
-                        <a href="index.html" class="menu__link" onclick="closeMenu()">Home</a>
-                    </li>
-                    <li class="menu__list">
-                        <a href="movies.html?search=all%20movies" class="menu__link" onclick="closeMenu()">Find Movies</a>
-                    </li>
-                    <li class="menu__list">
-                        <a href="#" class="menu__link" onclick="closeMenu()">Contact</a>
-                    </li>
-                </ul>
+                <button class="btn__menu" onclick="openMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
     </nav>
+
+    <!-- Mobile Menu Backdrop -->
+    <div class="menu__backdrop">
+        <div class="menu__links">
+            <button class="btn__menu--close" onclick="closeMenu()">
+                <i class="fas fa-times"></i>
+            </button>
+            <a href="index.html" class="menu__link" onclick="closeMenu()">Home</a>
+            <a href="movies.html?search=all%20movies" class="menu__link" onclick="closeMenu()">Find Movies</a>
+            <a href="#" class="menu__link" onclick="openContactForm(); closeMenu()">Contact</a>
+        </div>
+    </div>
 
     <section id="movies">
         <div class="container">
@@ -129,14 +140,45 @@
             emailjs.init("XZiqXvXGUZ2WaKUne");
         })();
 
-        // Burger Menu Functions
+        // Theme Toggle Function
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            // Update all theme toggle icons
+            const themeIcons = document.querySelectorAll('.theme-toggle i');
+            themeIcons.forEach(icon => {
+                icon.className = newTheme === 'light' ? 'fa-regular fa-moon' : 'fa-regular fa-sun';
+            });
+        }
+
+        // Set initial theme icon
+        function setInitialThemeIcon() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const themeIcons = document.querySelectorAll('.theme-toggle i');
+            themeIcons.forEach(icon => {
+                icon.className = currentTheme === 'light' ? 'fa-regular fa-moon' : 'fa-regular fa-sun';
+            });
+        }
+
+        // Call setInitialThemeIcon when the page loads
+        document.addEventListener('DOMContentLoaded', setInitialThemeIcon);
+
+        // Call setInitialThemeIcon when the menu opens (to ensure burger menu icon is correct)
         function openMenu() {
-            document.querySelector('.menu__backdrop').style.display = 'flex';
+            const backdrop = document.querySelector('.menu__backdrop');
+            backdrop.classList.add('show');
             document.body.style.overflow = 'hidden';
+            setInitialThemeIcon();
         }
 
         function closeMenu() {
-            document.querySelector('.menu__backdrop').style.display = 'none';
+            const backdrop = document.querySelector('.menu__backdrop');
+            backdrop.classList.remove('show');
             document.body.style.overflow = 'auto';
         }
 
