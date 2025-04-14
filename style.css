@@ -157,6 +157,12 @@ nav {
   transition: background-color var(--transition), box-shadow var(--transition);
 }
 
+#movies nav {
+  position: fixed;
+  top: 20px;
+  background-color: var(--background-color);
+}
+
 [data-theme="light"] nav {
   background-color: transparent;
   box-shadow: none;
@@ -442,6 +448,10 @@ h2 {
     .header__description {
         padding: 24px 24px 0;
     }
+
+    #movies nav {
+        top: 16px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -453,6 +463,14 @@ h2 {
 
     .header__description {
         padding: 20px 16px 0;
+    }
+
+    nav {
+        top: 12px;
+    }
+
+    #movies nav {
+        top: 12px;
     }
 }
 
