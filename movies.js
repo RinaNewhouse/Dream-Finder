@@ -391,5 +391,35 @@ menuBackdrop.addEventListener('click', (e) => {
     }
 });
 
+// Clear all filters
+function clearFilters() {
+    // Reset search input
+    document.getElementById('movieSearch').value = '';
+    
+    // Reset movies per page
+    document.getElementById('moviesPerPage').value = '10';
+    
+    // Reset genre filter if it exists
+    const genreFilter = document.getElementById('genreFilter');
+    if (genreFilter) {
+        genreFilter.value = '';
+    }
+    
+    // Reset rating filter if it exists
+    const ratingFilter = document.getElementById('ratingFilter');
+    if (ratingFilter) {
+        ratingFilter.value = '';
+    }
+    
+    // Reset to first page
+    currentPage = 1;
+    
+    // Reset the filtered movies to show all movies
+    filteredMovies = [...movies];
+    
+    // Re-render the movies list
+    renderMovies();
+}
+
 // Initialize the page
 init();
