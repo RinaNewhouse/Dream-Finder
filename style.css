@@ -224,7 +224,7 @@ button:active {
 .header__description {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 24px 0;
+  padding: min(32px, 4vh) 24px 0;
 }
 
 h1, h2, p, .nav__link, .landing__info--para, .landing__info--heading, .landing__info--subheading {
@@ -232,22 +232,22 @@ h1, h2, p, .nav__link, .landing__info--para, .landing__info--heading, .landing__
 }
 
 h1 {
-  font-size: 72px;
+  font-size: clamp(36px, 8vw, 72px);
   font-weight: 800;
   line-height: 1.2;
   color: var(--text-color);
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: min(24px, 3vh);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   padding: 0 24px;
 }
 
 h2 {
-  font-size: 32px;
+  font-size: clamp(20px, 4vw, 32px);
   font-weight: 500;
   line-height: 1.5;
   color: var(--text-color);
-  margin-bottom: 32px;
+  margin-bottom: min(32px, 4vh);
   text-align: center;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
   padding: 0 24px;
@@ -477,18 +477,17 @@ h2 {
 /* Input */
 .input__wrapper {
     position: relative;
-    width: 80%;
-    max-width: 800px;
+    width: min(800px, 90%);
     margin: 0 auto;
-    margin-top: 32px;
-    margin-bottom: 32px;
+    margin-top: min(32px, 4vh);
+    margin-bottom: min(32px, 4vh);
 }
 
 input {
     width: 100%;
     padding: 0 24px;
-    height: 70px;
-    font-size: 22px;
+    height: min(70px, 8vh);
+    font-size: clamp(16px, 2.5vw, 22px);
     font-weight: 500;
     border: 2px solid #e0e0e0;
     border-radius: 50px;
@@ -878,16 +877,15 @@ input:focus {
 
 #landing {
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding-top: 100px;
+  padding-top: max(80px, 10vh);
   background-color: transparent;
   transition: background-color var(--transition);
   z-index: 1;
   flex: 1;
-  min-height: calc(100vh - 60px); /* Adjust for footer height */
 }
 
 .video-background {
@@ -1493,16 +1491,16 @@ input:focus {
     display: inline-block;
     background-color: var(--primary-color);
     color: white;
-    padding: 14px 32px;
+    padding: min(14px, 2vh) min(32px, 4vw);
     border-radius: 50px;
-    font-size: 18px;
+    font-size: clamp(16px, 2.5vw, 18px);
     font-weight: 600;
     transition: all 300ms ease;
     text-decoration: none;
     text-align: center;
     width: auto;
     max-width: 300px;
-    margin: 0 auto 40px;
+    margin: 0 auto min(40px, 5vh);
     display: block;
 }
 
@@ -1803,6 +1801,7 @@ input:focus {
     position: relative;
     z-index: 10;
     margin-top: auto;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .footer__content {
@@ -1879,5 +1878,57 @@ input:focus {
 
     .back-to-top i {
         font-size: 10px;
+    }
+}
+
+/* Media query adjustments */
+@media (max-height: 700px) {
+    #landing {
+        padding-top: 70px;
+    }
+
+    .header__description {
+        padding-top: 20px;
+    }
+
+    .input__wrapper {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    input {
+        height: 55px;
+    }
+
+    .see-all-btn {
+        padding: 12px 28px;
+        margin-bottom: 30px;
+    }
+}
+
+@media (min-height: 800px) {
+    #landing {
+        padding-top: 12vh;
+    }
+
+    .header__description {
+        padding-top: 5vh;
+    }
+}
+
+/* iPhone specific optimizations */
+@supports (-webkit-touch-callout: none) {
+    #landing {
+        min-height: -webkit-fill-available;
+        padding-top: max(85px, 12vh);
+    }
+
+    .input__wrapper {
+        margin-top: min(28px, 3.5vh);
+        margin-bottom: min(28px, 3.5vh);
+    }
+
+    input {
+        height: min(65px, 7vh);
     }
 }
