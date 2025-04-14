@@ -467,9 +467,6 @@ input::placeholder {
     color: #666;
     opacity: 0.8;
     line-height: normal;
-    vertical-align: middle;
-    display: flex;
-    align-items: center;
 }
 
 input:focus {
@@ -1371,8 +1368,9 @@ input:focus {
   opacity: 0.8;
   line-height: normal;
   vertical-align: middle;
-  display: flex;
-  align-items: center;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 [data-theme="light"] .search__input {
