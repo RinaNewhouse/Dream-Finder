@@ -12,6 +12,7 @@
   --accent-color: #9b75e4;
   --input-border: #e0e0e0;
   --overlay-color: rgba(0, 0, 0, 0.2);
+  --placeholder-color: #666666;
 }
 
 [data-theme="light"] {
@@ -25,6 +26,7 @@
   --accent-color: #7342d6;
   --input-border: #e0e0e0;
   --overlay-color: rgba(255, 255, 255, 0.1);
+  --placeholder-color: #666666;
 }
 
 [data-theme="dark"] {
@@ -36,6 +38,7 @@
   --paragraph-color: #a7a9be;
   --input-border: #e0e0e0;
   --overlay-color: rgba(0, 0, 0, 0.7);
+  --placeholder-color: #a7a9be;
 }
 
 /* Apply theme colors to all text elements */
@@ -64,23 +67,40 @@
 }
 
 /* Logo color adjustments */
+.logo {
+  width: 70px;
+  height: 70px;
+  padding: 12px;
+  filter: brightness(0) invert(1);
+  display: flex;
+  align-items: center;
+  transition: filter var(--transition);
+}
+
+/* Default light mode - black logo */
 [data-theme="light"] .logo {
   filter: brightness(0);
 }
 
+/* Override for home page only - white logo */
+[data-theme="light"] #landing .logo {
+  filter: brightness(0) invert(1);
+}
+
+/* Dark mode - always white logo */
 [data-theme="dark"] .logo {
   filter: brightness(0) invert(1);
 }
 
 /* Search input adjustments */
 [data-theme="light"] .search__input {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.05);
   color: var(--text-color);
 }
 
 [data-theme="light"] .search__input::placeholder {
-  color: var(--text-color);
-  opacity: 0.7;
+  color: var(--placeholder-color);
+  opacity: 0.8;
 }
 
 /* Movie card adjustments */
@@ -149,16 +169,6 @@ img {
   height: 100%;
   max-height: 50vh;
   padding: 20px;
-}
-
-.logo {
-  width: 70px;
-  height: 70px;
-  padding: 12px;
-  filter: brightness(0) invert(1);
-  display: flex;
-  align-items: center;
-  transition: filter var(--transition);
 }
 
 a {
@@ -901,7 +911,7 @@ input:focus {
 }
 
 [data-theme="light"] .logo {
-  filter: brightness(0) invert(1);
+  color: black;
   transition: filter var(--transition);
 }
 
@@ -1348,7 +1358,7 @@ input:focus {
   padding: 12px 80px 12px 20px;
   height: 45px;
   font-size: 16px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
   border: 2px solid var(--primary-color);
   border-radius: 8px;
   color: var(--text-color);
@@ -1357,7 +1367,7 @@ input:focus {
 }
 
 .search__input::placeholder {
-  color: var(--text-color);
+  color: var(--placeholder-color);
   opacity: 0.8;
   line-height: normal;
   vertical-align: middle;
@@ -1366,13 +1376,12 @@ input:focus {
 }
 
 [data-theme="light"] .search__input {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-color: var(--primary-color);
-  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-color);
 }
 
 [data-theme="light"] .search__input::placeholder {
-  color: #ffffff;
+  color: var(--placeholder-color);
   opacity: 0.8;
 }
 
@@ -1654,4 +1663,29 @@ input:focus {
         padding: 10px;
         font-size: 13px;
   }
+}
+
+[data-theme="light"] #landing h1,
+[data-theme="light"] #landing h2 {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] #landing .nav__link {
+    color: white;
+}
+
+[data-theme="light"] #landing .logo {
+    filter: brightness(0) invert(1);
+}
+
+[data-theme="light"] #landing .theme-toggle,
+[data-theme="light"] #landing .btn__menu {
+    color: white;
+}
+
+[data-theme="light"] #landing .purple {
+    color: #7342d6 !important;
+    text-shadow: 2px 2px 4px rgba(45, 45, 63, 0.25),
+                 0 0 15px rgba(115, 66, 214, 0.2);
 }
