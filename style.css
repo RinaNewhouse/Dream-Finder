@@ -1795,21 +1795,20 @@ input:focus {
 
 /* Footer Styles */
 .footer {
-    width: 100%;
-    padding: 16px 0;
     background-color: transparent;
-    position: relative;
+    color: white;
+    padding: 24px 0;
+    text-align: center;
+    font-size: 14px;
     z-index: 10;
     margin-top: auto;
     padding-bottom: env(safe-area-inset-bottom);
 }
 
-.footer__content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    text-align: center;
-    position: relative;
+.footer__copyright {
+    margin: 0;
+    color: white;
+    text-shadow: none;
 }
 
 .footer__info {
@@ -1820,10 +1819,11 @@ input:focus {
 }
 
 .footer__info p {
-    color: var(--text-color);
+    color: white;
     font-size: 14px;
     opacity: 0.8;
     margin: 0;
+    text-shadow: none;
 }
 
 .footer__info i.fa-heart {
