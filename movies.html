@@ -13,14 +13,8 @@
             background-color: transparent;
         }
     </style>
-    <script>
-        // Set initial theme before page loads
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        }
-    </script>
     <link rel="stylesheet" href="style.css">
+    <script src="theme.js"></script>
     <script src="movies.js" defer></script>
     <script src="https://kit.fontawesome.com/42d214a21a.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -140,40 +134,10 @@
             emailjs.init("XZiqXvXGUZ2WaKUne");
         })();
 
-        // Theme Toggle Function
-        function toggleTheme() {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-
-            // Update all theme toggle icons
-            const themeIcons = document.querySelectorAll('.theme-toggle i');
-            themeIcons.forEach(icon => {
-                icon.className = newTheme === 'light' ? 'fa-regular fa-moon' : 'fa-regular fa-sun';
-            });
-        }
-
-        // Set initial theme icon
-        function setInitialThemeIcon() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const themeIcons = document.querySelectorAll('.theme-toggle i');
-            themeIcons.forEach(icon => {
-                icon.className = currentTheme === 'light' ? 'fa-regular fa-moon' : 'fa-regular fa-sun';
-            });
-        }
-
-        // Call setInitialThemeIcon when the page loads
-        document.addEventListener('DOMContentLoaded', setInitialThemeIcon);
-
-        // Call setInitialThemeIcon when the menu opens (to ensure burger menu icon is correct)
         function openMenu() {
             const backdrop = document.querySelector('.menu__backdrop');
             backdrop.classList.add('show');
             document.body.style.overflow = 'hidden';
-            setInitialThemeIcon();
         }
 
         function closeMenu() {
