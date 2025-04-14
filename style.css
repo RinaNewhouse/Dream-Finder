@@ -413,8 +413,10 @@ h2 {
         display: block;
     }
 
-    .theme-toggle {
-        margin: 0;
+    .logo {
+        width: 60px;
+        height: 60px;
+        padding: 10px;
     }
 }
 
