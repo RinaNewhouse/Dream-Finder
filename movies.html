@@ -26,7 +26,7 @@
             <ul class="nav__links">
                 <li><a href="index.html" class="nav__link">Home</a></li>
                 <li><a href="movies.html?search=all%20movies" class="nav__link">Find Movies</a></li>
-                <li><a href="#" class="nav__link nav__link--primary">Contact</a></li>
+                <li><a href="#" class="nav__link nav__link--primary" onclick="openContactForm()">Contact</a></li>
             </ul>
             <div class="nav__buttons">
                 <button class="theme-toggle nav__button" onclick="toggleTheme()">
@@ -128,8 +128,33 @@
         </div>
     </section>
 
+    <!-- Contact Form Modal -->
+    <div class="contact__modal" id="contactModal">
+        <div class="contact__modal-content">
+            <button class="contact__close-btn" onclick="closeContactForm()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2>Contact Us</h2>
+            <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                <div class="form__group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form__group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form__group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="contact__submit-btn">Send Message</button>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Initialize EmailJS with your public key
+        // Initialize EmailJS
         (function() {
             emailjs.init("XZiqXvXGUZ2WaKUne");
         })();
@@ -146,16 +171,47 @@
             document.body.style.overflow = 'auto';
         }
 
+        // Contact Form Functions
+        function openContactForm() {
+            document.getElementById('contactModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContactForm() {
+            document.getElementById('contactModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            
+            const templateParams = {
+                from_name: document.getElementById('name').value,
+                from_email: document.getElementById('email').value,
+                message: document.getElementById('message').value
+            };
+
+            emailjs.send('service_8ev3m6g', 'template_nh7nrxg', templateParams)
+                .then(function(response) {
+                    alert('Message sent successfully!');
+                    closeContactForm();
+                    document.getElementById('contactForm').reset();
+                }, function(error) {
+                    alert('Failed to send message. Please try again.');
+                });
+        }
+
         // Close menu when clicking outside
         window.onclick = function(event) {
             const menu = document.querySelector('.menu__backdrop');
+            const modal = document.getElementById('contactModal');
             if (event.target === menu) {
                 closeMenu();
             }
+            if (event.target === modal) {
+                closeContactForm();
+            }
         }
-
-        // Contact Form Functions
-        // ... existing code ...
     </script>
 </body>
 </html>
