@@ -156,6 +156,18 @@
         </div>
     </div>
 
+    <footer class="footer">
+        <div class="footer__content">
+            <div class="footer__info">
+                <p>Made with <i class="fas fa-heart"></i> by Rina Newhouse</p>
+                <p>&copy; 2025 DreamFinder. All rights reserved.</p>
+            </div>
+            <button onclick="scrollToTop()" class="back-to-top">
+                <i class="fas fa-arrow-up"></i> Back to Top
+            </button>
+        </div>
+    </footer>
+
     <script>
         // Initialize EmailJS
         (function() {
@@ -214,6 +226,13 @@
             if (event.target === modal) {
                 closeContactForm();
             }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     </script>
 </body>
