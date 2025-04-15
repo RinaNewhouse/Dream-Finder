@@ -661,7 +661,7 @@ input:focus {
   }
 
   .input__button {
-    width: 50px;
+    width: 80px;
     height: calc(100% - 8px);
     right: 4px;
   }
@@ -724,7 +724,7 @@ input:focus {
   }
 
   .input__button {
-    width: 40px;
+    width: 70px;
     height: calc(100% - 6px);
     right: 3px;
   }
@@ -784,7 +784,7 @@ input:focus {
   }
 
   .input__button {
-    width: 32px;
+    width: 60px;
     height: calc(100% - 6px);
     right: 3px;
   }
@@ -845,7 +845,7 @@ input:focus {
   }
 
   .input__button {
-    width: 28px;
+    width: 50px;
     height: calc(100% - 4px);
     right: 2px;
   }
