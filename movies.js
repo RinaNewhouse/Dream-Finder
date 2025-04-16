@@ -565,11 +565,13 @@ const closeMenuBtn = document.querySelector('.btn__menu--close');
 function openMenu() {
     menuBackdrop.classList.add('show');
     document.body.style.overflow = 'hidden';
+    closeMenuBtn.style.display = 'flex';
 }
 
 function closeMenu() {
     menuBackdrop.classList.remove('show');
     document.body.style.overflow = 'auto';
+    closeMenuBtn.style.display = 'none';
 }
 
 menuBtn.addEventListener('click', openMenu);
