@@ -129,32 +129,31 @@ element.style {
     width: 100%;
 }
 
-html {
-  scroll-behavior: smooth;
-  background-color: var(--background-color);
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  transition: background-color var(--transition), color var(--transition);
-  font-family: "Poppins", sans-serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+    max-width: 100vw;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color var(--transition), color var(--transition);
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 nav {
-  background-color: transparent;
-  height: 70px;
-  position: absolute;
-  width: 100%;
-  top: 20px;
-  z-index: 100;
-  box-shadow: none;
-  transition: background-color var(--transition), box-shadow var(--transition);
+    position: absolute;
+    width: 100%;
+    top: clamp(32px, 5vh, 48px);
+    z-index: 100;
+    background-color: transparent;
+    height: 70px;
 }
 
 #movies nav {
@@ -223,8 +222,13 @@ button:active {
 
 .header__description {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
-  padding: min(32px, 4vh) 24px 0;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 1;
 }
 
 h1, h2, p, .nav__link, .landing__info--para, .landing__info--heading, .landing__info--subheading {
@@ -442,35 +446,35 @@ h2 {
 
     nav {
         height: 60px;
-        top: 16px;
+        top: clamp(24px, 4vh, 32px);
     }
     
     .header__description {
-        padding: 24px 24px 0;
+        padding: 0 16px;
     }
 
     #movies nav {
-        top: 16px;
+        top: 24px;
     }
 }
 
 @media (max-width: 480px) {
     .btn__menu--close {
-        top: 12px;
+        top: clamp(20px, 3vh, 28px);
         right: 15px;
         font-size: 20px;
     }
 
     .header__description {
-        padding: 20px 16px 0;
+        padding: 0 12px;
     }
 
     nav {
-        top: 12px;
+        top: clamp(20px, 3vh, 28px);
     }
 
     #movies nav {
-        top: 12px;
+        top: 20px;
     }
 }
 
@@ -625,7 +629,7 @@ input:focus {
 
 @media (max-width: 550px) {
   #landing {
-    padding-top: 85px;
+    padding-top: clamp(120px, 18vh, 160px);
   }
 
   h1 {
@@ -696,7 +700,7 @@ input:focus {
 
 @media (max-width: 400px) {
   #landing {
-    padding-top: 80px;
+    padding-top: clamp(100px, 16vh, 140px);
   }
 
   h1 {
@@ -881,16 +885,14 @@ input:focus {
 }
 
 #landing {
-  position: relative;
-  min-height: 100vh;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding-top: max(80px, 10vh);
+  padding-top: clamp(140px, 20vh, 200px);
   background-color: transparent;
   transition: background-color var(--transition);
   z-index: 1;
   flex: 1;
+  position: relative;
 }
 
 .video-background {
@@ -957,12 +959,11 @@ input:focus {
 
 /* Movies Page Styles */
 #movies {
-  position: relative;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 120px 0 40px;
   background-color: var(--background-color);
-  padding: 90px 0 24px;
-  transition: background-color var(--transition);
-  flex: 1;
 }
 
 .container {
@@ -1816,22 +1817,25 @@ input:focus {
 
 /* Footer Styles */
 .footer {
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-    font-size: 14px;
-    z-index: 10;
-    margin-top: auto;
-    padding-bottom: max(24px, env(safe-area-inset-bottom));
-    position: relative;
     width: 100%;
-    backdrop-filter: blur(10px);
+    margin-top: auto;
+    padding: 24px 0;
+    background-color: transparent;
+    position: relative;
+    z-index: 10;
 }
 
-#landing .footer {
-    background-color: rgba(0, 0, 0, 0.6) !important;
-    margin-top: auto;
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: -1;
 }
 
 .footer__content {
@@ -1899,85 +1903,55 @@ input:focus {
 
 /* Adjust main content spacing */
 #landing {
-    position: relative;
-    min-height: 100vh;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding-top: max(80px, 10vh);
+    padding-top: clamp(140px, 20vh, 200px);
     background-color: transparent;
     transition: background-color var(--transition);
     z-index: 1;
-}
-
-.header__description {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: min(32px, 4vh) 24px;
     flex: 1;
+    position: relative;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .footer {
-        padding: 16px 0;
+    #landing {
+        padding-top: clamp(120px, 18vh, 160px);
     }
 
-    .footer__content {
-        padding: 0 16px;
-    }
-
-    .footer__info p {
-        font-size: 12px;
-    }
-
-    .back-to-top {
-        font-size: 12px;
-        padding: 6px 12px;
-        margin-top: 12px;
-    }
-
-    .back-to-top i {
-        font-size: 10px;
+    nav {
+        top: clamp(24px, 4vh, 32px);
     }
 
     .header__description {
-        padding: min(24px, 3vh) 16px;
+        padding: 0 16px;
     }
 }
 
 @media (max-width: 480px) {
-    .footer {
-        padding: 12px 0;
+    #landing {
+        padding-top: clamp(100px, 16vh, 140px);
     }
 
-    .footer__content {
-        padding: 0 12px;
+    nav {
+        top: clamp(20px, 3vh, 28px);
     }
 
     .header__description {
-        padding: min(20px, 2.5vh) 12px;
+        padding: 0 12px;
     }
 }
 
-/* Height-based responsive adjustments */
+/* Height-based adjustments */
 @media (max-height: 700px) {
     #landing {
-        padding-top: 70px;
-    }
-
-    .header__description {
-        padding-top: 20px;
+        padding-top: clamp(110px, 16vh, 140px);
     }
 }
 
 @media (min-height: 800px) {
     #landing {
-        padding-top: 12vh;
-    }
-
-    .header__description {
-        padding-top: 5vh;
+        padding-top: clamp(160px, 22vh, 220px);
     }
 }
 
@@ -1985,11 +1959,6 @@ input:focus {
 @supports (-webkit-touch-callout: none) {
     #landing {
         min-height: -webkit-fill-available;
-        padding-top: max(85px, 12vh);
-    }
-
-    .footer {
-        padding-bottom: max(24px, env(safe-area-inset-bottom));
     }
 }
 
