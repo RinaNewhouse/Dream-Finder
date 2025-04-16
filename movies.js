@@ -30,8 +30,27 @@ const searchButton = document.getElementById('searchButton');
 // Fetch movie details from OMDB API
 async function fetchMovieDetails(imdbID) {
     try {
-        const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&i=${imdbID}`);
+        const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&i=${imdbID}&plot=short`);
         const data = await response.json();
+        console.log('API Response Plot:', data.Plot);
+        
+        // Ensure proper punctuation for all plot summaries
+        if (data.Plot) {
+            // Fix specific known truncation
+            data.Plot = data.Plot.replace(/\s+d\.\.\.$/, ' deeds.');
+            
+            // Add period if missing at the end
+            if (!data.Plot.endsWith('.') && !data.Plot.endsWith('!') && !data.Plot.endsWith('?')) {
+                data.Plot = data.Plot.trim() + '.';
+            }
+            
+            // Fix ellipsis if present
+            data.Plot = data.Plot.replace(/\.{2,}/g, '...');
+            
+            // Remove extra spaces before punctuation
+            data.Plot = data.Plot.replace(/\s+\./g, '.');
+        }
+        
         return data;
     } catch (error) {
         console.error('Error fetching movie details:', error);
@@ -154,10 +173,87 @@ function renderMovies() {
                         </div>
                     </div>
                 </div>
+                <div class="movie__details" data-id="${movie.imdbID}">
+                    <button class="movie__details-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <h3 class="movie__details-title">${movie.Title}</h3>
+                    <div class="movie__summary">
+                        <h4>Summary</h4>
+                        <p>${movie.Plot ? movie.Plot.trim() : 'No summary available.'}</p>
+                    </div>
+                    <div class="movie__recommendations">
+                        <h4>You Would Like This Movie If:</h4>
+                        <ul>
+                            ${generateRecommendations(movie).map(rec => `<li>${rec}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                <div class="movie__details-backdrop" data-id="${movie.imdbID}"></div>
             `;
             }
         )
         .join('');
+
+    // Add click event listeners to movie cards
+    document.querySelectorAll('.movie__card').forEach(card => {
+        card.addEventListener('click', function() {
+            const movieId = this.getAttribute('data-id');
+            const details = document.querySelector(`.movie__details[data-id="${movieId}"]`);
+            const backdrop = document.querySelector(`.movie__details-backdrop[data-id="${movieId}"]`);
+            
+            // Toggle the details popup
+            if (details.classList.contains('show')) {
+                details.classList.remove('show');
+                backdrop.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            } else {
+                // Hide any other open details
+                document.querySelectorAll('.movie__details.show').forEach(d => {
+                    d.classList.remove('show');
+                });
+                document.querySelectorAll('.movie__details-backdrop.show').forEach(b => {
+                    b.classList.remove('show');
+                });
+                
+                // Show the clicked details
+                details.classList.add('show');
+                backdrop.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    });
+
+    // Add click event listeners to close buttons
+    document.querySelectorAll('.movie__details-close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const details = this.closest('.movie__details');
+            const movieId = details.getAttribute('data-id');
+            const backdrop = document.querySelector(`.movie__details-backdrop[data-id="${movieId}"]`);
+            details.classList.remove('show');
+            backdrop.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        });
+    });
+
+    // Close popup when clicking on backdrop
+    document.querySelectorAll('.movie__details-backdrop').forEach(backdrop => {
+        backdrop.addEventListener('click', function() {
+            const movieId = this.getAttribute('data-id');
+            const details = document.querySelector(`.movie__details[data-id="${movieId}"]`);
+            details.classList.remove('show');
+            this.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        });
+    });
+
+    // Prevent closing when clicking inside the movie details
+    document.querySelectorAll('.movie__details').forEach(details => {
+        details.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    });
 }
 
 // Update pagination controls
@@ -364,6 +460,101 @@ function generateStarRating(rating) {
     }
     
     return starsHTML;
+}
+
+// Function to generate movie recommendations based on genre and plot
+function generateRecommendations(movie) {
+    const genre = movie.Genre?.toLowerCase() || '';
+    const plot = movie.Plot?.toLowerCase() || '';
+    
+    const recommendations = {
+        action: [
+            'You enjoy intense action sequences and thrilling stunts',
+            'You like seeing heroes overcome impossible odds',
+            'You appreciate well-choreographed fight scenes'
+        ],
+        comedy: [
+            'You enjoy witty dialogue and clever humor',
+            'You like seeing characters in awkward situations',
+            'You appreciate light-hearted entertainment'
+        ],
+        drama: [
+            'You enjoy deep character development',
+            'You like emotional storytelling',
+            'You appreciate thought-provoking themes'
+        ],
+        romance: [
+            'You enjoy watching relationships develop',
+            'You like emotional love stories',
+            'You appreciate romantic tension and chemistry'
+        ],
+        horror: [
+            'You enjoy suspense and jump scares',
+            'You like psychological thrillers',
+            'You appreciate atmospheric tension'
+        ],
+        sciFi: [
+            'You enjoy futuristic concepts and technology',
+            'You like exploring philosophical questions',
+            'You appreciate imaginative world-building'
+        ],
+        thriller: [
+            'You enjoy suspense and mystery',
+            'You like plot twists and surprises',
+            'You appreciate psychological tension'
+        ],
+        fantasy: [
+            'You enjoy magical worlds and creatures',
+            'You like epic quests and adventures',
+            'You appreciate imaginative storytelling'
+        ],
+        animation: [
+            'You enjoy creative visual storytelling',
+            'You like family-friendly entertainment',
+            'You appreciate artistic animation styles'
+        ],
+        mystery: [
+            'You enjoy solving puzzles and riddles',
+            'You like uncovering hidden secrets',
+            'You appreciate clever plot twists'
+        ],
+        crime: [
+            'You enjoy detective stories and investigations',
+            'You like seeing justice served',
+            'You appreciate complex criminal plots'
+        ],
+        adventure: [
+            'You enjoy exciting journeys and exploration',
+            'You like seeing characters face challenges',
+            'You appreciate epic quests and discoveries'
+        ]
+    };
+
+    // Find matching genre recommendations
+    let genreRecommendations = [];
+    for (const [key, values] of Object.entries(recommendations)) {
+        if (genre.includes(key.toLowerCase())) {
+            genreRecommendations = [...genreRecommendations, ...values];
+        }
+    }
+
+    // If no genre matches, use plot keywords
+    if (genreRecommendations.length === 0) {
+        if (plot.includes('love') || plot.includes('romance')) {
+            genreRecommendations = recommendations.romance;
+        } else if (plot.includes('fight') || plot.includes('action')) {
+            genreRecommendations = recommendations.action;
+        } else if (plot.includes('scary') || plot.includes('horror')) {
+            genreRecommendations = recommendations.horror;
+        } else {
+            genreRecommendations = recommendations.drama;
+        }
+    }
+
+    // Get three unique recommendations
+    const uniqueRecommendations = [...new Set(genreRecommendations)];
+    const shuffled = uniqueRecommendations.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 3);
 }
 
 // Burger menu functionality
