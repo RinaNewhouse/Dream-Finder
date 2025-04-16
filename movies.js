@@ -58,6 +58,15 @@ async function fetchMovieDetails(imdbID) {
     }
 }
 
+// Shuffle array using Fisher-Yates algorithm
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 // Initialize the page
 async function init() {
     showLoading();
@@ -70,7 +79,12 @@ async function init() {
         const allMovies = [];
         
         try {
-            const promises = popularSearches.map(term => fetchMovies(term));
+            // Shuffle the search terms to get different genres each time
+            const shuffledSearches = shuffleArray([...popularSearches]);
+            // Only use first 4 genres to speed up loading
+            const selectedSearches = shuffledSearches.slice(0, 4);
+            
+            const promises = selectedSearches.map(term => fetchMovies(term));
             const results = await Promise.all(promises);
             
             results.forEach(response => {
@@ -82,12 +96,14 @@ async function init() {
             // Remove duplicates
             const uniqueMovies = [...new Map(allMovies.map(movie => [movie.imdbID, movie])).values()];
             
-            // Fetch details for each movie
+            // Shuffle the unique movies before fetching details
+            const shuffledMovies = shuffleArray(uniqueMovies);
+            
+            // Fetch details for each movie (limit to 40 movies for performance)
             const detailedMovies = await Promise.all(
-                uniqueMovies.map(async movie => {
+                shuffledMovies.slice(0, 40).map(async movie => {
                     const details = await fetchMovieDetails(movie.imdbID);
                     const rating = (Math.random() * 1.5 + 3.5).toFixed(1);
-                    // Ensure we have the correct year data
                     const year = details.Year || movie.Year;
                     return { ...movie, ...details, rating, Year: year };
                 })
@@ -108,7 +124,6 @@ async function init() {
             initialMovies.map(async movie => {
                 const details = await fetchMovieDetails(movie.imdbID);
                 const rating = (Math.random() * 1.5 + 3.5).toFixed(1);
-                // Ensure we have the correct year data
                 const year = details.Year || movie.Year;
                 return { ...movie, ...details, rating, Year: year };
             })
@@ -117,6 +132,8 @@ async function init() {
         movies = detailedMovies;
     }
     
+    // Shuffle the final movies array before filtering and displaying
+    movies = shuffleArray(movies);
     filteredMovies = [...movies];
     updatePagination();
     hideLoading();
@@ -198,25 +215,11 @@ function renderMovies() {
     // Add click event listeners to movie cards
     document.querySelectorAll('.movie__card').forEach(card => {
         card.addEventListener('click', function() {
-            const movieId = this.getAttribute('data-id');
+            const movieId = this.dataset.id;
             const details = document.querySelector(`.movie__details[data-id="${movieId}"]`);
             const backdrop = document.querySelector(`.movie__details-backdrop[data-id="${movieId}"]`);
             
-            // Toggle the details popup
-            if (details.classList.contains('show')) {
-                details.classList.remove('show');
-                backdrop.classList.remove('show');
-                document.body.style.overflow = 'auto';
-            } else {
-                // Hide any other open details
-                document.querySelectorAll('.movie__details.show').forEach(d => {
-                    d.classList.remove('show');
-                });
-                document.querySelectorAll('.movie__details-backdrop.show').forEach(b => {
-                    b.classList.remove('show');
-                });
-                
-                // Show the clicked details
+            if (details && backdrop) {
                 details.classList.add('show');
                 backdrop.classList.add('show');
                 document.body.style.overflow = 'hidden';
@@ -224,34 +227,18 @@ function renderMovies() {
         });
     });
 
-    // Add click event listeners to close buttons
-    document.querySelectorAll('.movie__details-close').forEach(closeBtn => {
-        closeBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const details = this.closest('.movie__details');
-            const movieId = details.getAttribute('data-id');
-            const backdrop = document.querySelector(`.movie__details-backdrop[data-id="${movieId}"]`);
-            details.classList.remove('show');
-            backdrop.classList.remove('show');
-            document.body.style.overflow = 'auto';
-        });
-    });
-
-    // Close popup when clicking on backdrop
-    document.querySelectorAll('.movie__details-backdrop').forEach(backdrop => {
-        backdrop.addEventListener('click', function() {
-            const movieId = this.getAttribute('data-id');
+    // Add click event listeners to close buttons and backdrops
+    document.querySelectorAll('.movie__details-close, .movie__details-backdrop').forEach(element => {
+        element.addEventListener('click', function() {
+            const movieId = this.closest('.movie__details, .movie__details-backdrop').dataset.id;
             const details = document.querySelector(`.movie__details[data-id="${movieId}"]`);
-            details.classList.remove('show');
-            this.classList.remove('show');
-            document.body.style.overflow = 'auto';
-        });
-    });
-
-    // Prevent closing when clicking inside the movie details
-    document.querySelectorAll('.movie__details').forEach(details => {
-        details.addEventListener('click', function(e) {
-            e.stopPropagation();
+            const backdrop = document.querySelector(`.movie__details-backdrop[data-id="${movieId}"]`);
+            
+            if (details && backdrop) {
+                details.classList.remove('show');
+                backdrop.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
         });
     });
 }
@@ -369,13 +356,37 @@ function hideLoading() {
     moviesList.style.display = 'grid';
 }
 
-// Event listeners
-genreFilter.addEventListener('change', filterMovies);
-ratingFilter.addEventListener('change', filterMovies);
-yearFilter.addEventListener('change', filterMovies);
-moviesPerPageSelect.addEventListener('change', updateMoviesPerPage);
-prevPageBtn.addEventListener('click', prevPage);
-nextPageBtn.addEventListener('click', nextPage);
+// Event Listeners
+document.addEventListener('DOMContentLoaded', function() {
+    init();
+
+    // Add event listeners for filters
+    genreFilter.addEventListener('change', filterMovies);
+    ratingFilter.addEventListener('change', filterMovies);
+    yearFilter.addEventListener('change', filterMovies);
+    moviesPerPageSelect.addEventListener('change', updateMoviesPerPage);
+
+    // Add event listeners for pagination
+    prevPageBtn.addEventListener('click', prevPage);
+    nextPageBtn.addEventListener('click', nextPage);
+
+    // Add event listener for search
+    searchButton.addEventListener('click', function() {
+        const query = movieSearch.value.trim();
+        if (query) {
+            performSearch(query);
+        }
+    });
+
+    movieSearch.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            const query = this.value.trim();
+            if (query) {
+                performSearch(query);
+            }
+        }
+    });
+});
 
 // Function to perform search
 async function performSearch(query) {
@@ -426,17 +437,6 @@ async function performSearch(query) {
         hideLoading();
     }
 }
-
-// Event listeners for search
-searchButton.addEventListener('click', () => {
-    performSearch(movieSearch.value);
-});
-
-movieSearch.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        performSearch(movieSearch.value);
-    }
-});
 
 function generateStarRating(rating) {
     const fullStars = Math.floor(rating);
@@ -556,63 +556,3 @@ function generateRecommendations(movie) {
     const shuffled = uniqueRecommendations.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 3);
 }
-
-// Burger menu functionality
-const menuBtn = document.querySelector('.btn__menu');
-const menuBackdrop = document.querySelector('.menu__backdrop');
-const closeMenuBtn = document.querySelector('.btn__menu--close');
-
-function openMenu() {
-    menuBackdrop.classList.add('show');
-    document.body.style.overflow = 'hidden';
-    closeMenuBtn.style.display = 'flex';
-}
-
-function closeMenu() {
-    menuBackdrop.classList.remove('show');
-    document.body.style.overflow = 'auto';
-    closeMenuBtn.style.display = 'none';
-}
-
-menuBtn.addEventListener('click', openMenu);
-closeMenuBtn.addEventListener('click', closeMenu);
-
-// Close menu when clicking outside
-menuBackdrop.addEventListener('click', (e) => {
-    if (e.target === menuBackdrop) {
-        closeMenu();
-    }
-});
-
-// Clear all filters
-function clearFilters() {
-    // Reset search input
-    document.getElementById('movieSearch').value = '';
-    
-    // Reset movies per page
-    document.getElementById('moviesPerPage').value = '10';
-    
-    // Reset genre filter if it exists
-    const genreFilter = document.getElementById('genreFilter');
-    if (genreFilter) {
-        genreFilter.value = '';
-    }
-    
-    // Reset rating filter if it exists
-    const ratingFilter = document.getElementById('ratingFilter');
-    if (ratingFilter) {
-        ratingFilter.value = '';
-    }
-    
-    // Reset to first page
-    currentPage = 1;
-    
-    // Reset the filtered movies to show all movies
-    filteredMovies = [...movies];
-    
-    // Re-render the movies list
-    renderMovies();
-}
-
-// Initialize the page
-init();
