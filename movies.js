@@ -30,9 +30,11 @@ const searchButton = document.getElementById('searchButton');
 // Fetch movie details from OMDB API
 async function fetchMovieDetails(imdbID) {
     try {
-        const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&i=${imdbID}&plot=short`);
+        const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&i=${imdbID}&plot=full&type=movie`);
         const data = await response.json();
-        console.log('API Response Plot:', data.Plot);
+        
+        // Log the complete movie details for debugging
+        console.log('Complete movie details:', data);
         
         // Ensure proper punctuation for all plot summaries
         if (data.Plot) {
@@ -50,8 +52,21 @@ async function fetchMovieDetails(imdbID) {
             // Remove extra spaces before punctuation
             data.Plot = data.Plot.replace(/\s+\./g, '.');
         }
+
+        // Make sure we have all required fields
+        const movieDetails = {
+            ...data,
+            Genre: data.Genre || 'Unknown',
+            Plot: data.Plot || 'No plot available.',
+            Director: data.Director || 'Unknown',
+            Actors: data.Actors || 'Unknown cast',
+            Year: data.Year || 'Unknown year',
+            Title: data.Title,
+            imdbID: data.imdbID,
+            Poster: data.Poster
+        };
         
-        return data;
+        return movieDetails;
     } catch (error) {
         console.error('Error fetching movie details:', error);
         return null;
@@ -199,10 +214,10 @@ function renderMovies() {
                         <h4>Summary</h4>
                         <p>${movie.Plot ? movie.Plot.trim() : 'No summary available.'}</p>
                     </div>
-                    <div class="movie__recommendations">
+                    <div class="movie__recommendations" data-id="${movie.imdbID}">
                         <h4>You Would Like This Movie If:</h4>
-                        <ul>
-                            ${generateRecommendations(movie).map(rec => `<li>${rec}</li>`).join('')}
+                        <ul class="recommendations-list">
+                            <li><i class="fas fa-spinner fa-spin"></i> Generating personalized recommendations...</li>
                         </ul>
                     </div>
                 </div>
@@ -214,15 +229,41 @@ function renderMovies() {
 
     // Add click event listeners to movie cards
     document.querySelectorAll('.movie__card').forEach(card => {
-        card.addEventListener('click', function() {
+        card.addEventListener('click', async function() {
             const movieId = this.dataset.id;
             const details = document.querySelector(`.movie__details[data-id="${movieId}"]`);
             const backdrop = document.querySelector(`.movie__details-backdrop[data-id="${movieId}"]`);
+            const recommendationsDiv = document.querySelector(`.movie__recommendations[data-id="${movieId}"]`);
             
             if (details && backdrop) {
                 details.classList.add('show');
                 backdrop.classList.add('show');
                 document.body.style.overflow = 'hidden';
+
+                // Generate recommendations when the card is clicked
+                const movie = moviesToShow.find(m => m.imdbID === movieId);
+                if (movie && recommendationsDiv) {
+                    try {
+                        const recommendations = await generateRecommendations(movie);
+                        const recommendationsHTML = `
+                            <h4>You Would Like This Movie If:</h4>
+                            <ul class="recommendations-list">
+                                ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                            </ul>
+                        `;
+                        recommendationsDiv.innerHTML = recommendationsHTML;
+                    } catch (error) {
+                        console.error('Error updating recommendations:', error);
+                        recommendationsDiv.innerHTML = `
+                            <h4>You Would Like This Movie If:</h4>
+                            <ul class="recommendations-list">
+                                <li>You enjoy movies in the ${movie.Genre} genre</li>
+                                <li>You appreciate films from ${movie.Year}</li>
+                                <li>You like movies with similar themes</li>
+                            </ul>
+                        `;
+                    }
+                }
             }
         });
     });
@@ -462,97 +503,17 @@ function generateStarRating(rating) {
     return starsHTML;
 }
 
-// Function to generate movie recommendations based on genre and plot
-function generateRecommendations(movie) {
-    const genre = movie.Genre?.toLowerCase() || '';
-    const plot = movie.Plot?.toLowerCase() || '';
-    
-    const recommendations = {
-        action: [
-            'You enjoy intense action sequences and thrilling stunts',
-            'You like seeing heroes overcome impossible odds',
-            'You appreciate well-choreographed fight scenes'
-        ],
-        comedy: [
-            'You enjoy witty dialogue and clever humor',
-            'You like seeing characters in awkward situations',
-            'You appreciate light-hearted entertainment'
-        ],
-        drama: [
-            'You enjoy deep character development',
-            'You like emotional storytelling',
-            'You appreciate thought-provoking themes'
-        ],
-        romance: [
-            'You enjoy watching relationships develop',
-            'You like emotional love stories',
-            'You appreciate romantic tension and chemistry'
-        ],
-        horror: [
-            'You enjoy suspense and jump scares',
-            'You like psychological thrillers',
-            'You appreciate atmospheric tension'
-        ],
-        sciFi: [
-            'You enjoy futuristic concepts and technology',
-            'You like exploring philosophical questions',
-            'You appreciate imaginative world-building'
-        ],
-        thriller: [
-            'You enjoy suspense and mystery',
-            'You like plot twists and surprises',
-            'You appreciate psychological tension'
-        ],
-        fantasy: [
-            'You enjoy magical worlds and creatures',
-            'You like epic quests and adventures',
-            'You appreciate imaginative storytelling'
-        ],
-        animation: [
-            'You enjoy creative visual storytelling',
-            'You like family-friendly entertainment',
-            'You appreciate artistic animation styles'
-        ],
-        mystery: [
-            'You enjoy solving puzzles and riddles',
-            'You like uncovering hidden secrets',
-            'You appreciate clever plot twists'
-        ],
-        crime: [
-            'You enjoy detective stories and investigations',
-            'You like seeing justice served',
-            'You appreciate complex criminal plots'
-        ],
-        adventure: [
-            'You enjoy exciting journeys and exploration',
-            'You like seeing characters face challenges',
-            'You appreciate epic quests and discoveries'
-        ]
-    };
-
-    // Find matching genre recommendations
-    let genreRecommendations = [];
-    for (const [key, values] of Object.entries(recommendations)) {
-        if (genre.includes(key.toLowerCase())) {
-            genreRecommendations = [...genreRecommendations, ...values];
-        }
+// Function to generate movie recommendations
+async function generateRecommendations(movie) {
+    try {
+        // Use the imported function from movie-recommendations.js
+        return await window.getMovieRecommendations(movie);
+    } catch (error) {
+        console.error('Error getting recommendations:', error);
+        return [
+            'You enjoy watching movies in this genre',
+            'You appreciate good storytelling',
+            'You like interesting characters'
+        ];
     }
-
-    // If no genre matches, use plot keywords
-    if (genreRecommendations.length === 0) {
-        if (plot.includes('love') || plot.includes('romance')) {
-            genreRecommendations = recommendations.romance;
-        } else if (plot.includes('fight') || plot.includes('action')) {
-            genreRecommendations = recommendations.action;
-        } else if (plot.includes('scary') || plot.includes('horror')) {
-            genreRecommendations = recommendations.horror;
-        } else {
-            genreRecommendations = recommendations.drama;
-        }
-    }
-
-    // Get three unique recommendations
-    const uniqueRecommendations = [...new Set(genreRecommendations)];
-    const shuffled = uniqueRecommendations.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, 3);
 }
