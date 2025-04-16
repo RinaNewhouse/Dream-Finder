@@ -134,6 +134,7 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -150,11 +151,9 @@ body {
 /* Base Navigation Styles */
 nav {
     position: fixed !important;
-    top: 16px;
     left: 0;
     right: 0;
     width: 100%;
-    height: 70px;
     padding: 20px 0;
     z-index: 1000;
     background-color: transparent;
@@ -360,7 +359,6 @@ body:has(.menu__backdrop.show) .btn__menu {
 
 /* Movies Page Layout */
 #movies {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     background-color: var(--background-color);
@@ -439,12 +437,6 @@ body:has(.menu__backdrop.show) .btn__menu {
 }
 
 /* Movies Page Footer */
-#movies {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
 #movies .footer {
     margin-top: auto;
     flex-shrink: 0;
@@ -692,10 +684,6 @@ input:focus {
     padding: 24px 16px;
   }
 
-  nav {
-    height: 60px;
-  }
-
   h1 {
     font-size: 48px;
     line-height: 1.2;
@@ -865,11 +853,6 @@ input:focus {
     padding: 0 12px;
   }
 
-  nav {
-    height: 70px;
-    margin-bottom: 24px;
-  }
-
   .btn__menu {
     font-size: 20px;
   }
@@ -923,11 +906,6 @@ input:focus {
 
   .nav__container {
     padding: 0 8px;
-  }
-
-  nav {
-    height: 60px;
-    margin-bottom: 16px;
   }
 
   .btn__menu {
@@ -984,11 +962,6 @@ input:focus {
 
   .nav__container {
     padding: 0 6px;
-  }
-
-  nav {
-    height: 50px;
-    margin-bottom: 12px;
   }
 
   .btn__menu {
@@ -1133,31 +1106,15 @@ input:focus {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  #movies nav {
-    top: 12px;
-    padding: 16px 0;
-  }
-
   #movies .container {
-    margin-top: 100px;
     padding: 16px;
   }
 }
 
 @media (max-width: 480px) {
-  #movies nav {
-    top: 10px;
-    padding: 12px 0;
-  }
-
   #movies .container {
-    margin-top: 90px;
     padding: 12px;
   }
-}
-
-.movies__header {
-    margin-bottom: 24px;
 }
 
 .movies__header h2 {
@@ -2094,10 +2051,6 @@ input:focus {
         padding-top: clamp(90px, 12vh, 120px);
     }
 
-    nav {
-        top: 12px;
-    }
-
     .header__description {
         padding: 0 16px;
         margin-top: clamp(140px, 22vh, 180px);
@@ -2107,10 +2060,6 @@ input:focus {
 @media (max-width: 480px) {
     #landing {
         padding-top: clamp(80px, 10vh, 100px);
-    }
-
-    nav {
-        top: 10px;
     }
 
     .header__description {

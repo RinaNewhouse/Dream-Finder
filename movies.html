@@ -162,9 +162,11 @@
                 <p>Made with <i class="fas fa-heart"></i> by Rina Newhouse</p>
                 <p>&copy; 2025 DreamFinder. All rights reserved.</p>
             </div>
-            <button onclick="scrollToTop()" class="back-to-top">
-                <i class="fas fa-arrow-up"></i> Back to Top
-            </button>
+            <a href="#movies">
+                <button class="back-to-top">
+                    <i class="fas fa-arrow-up"></i> Back to Top
+                </button>
+            </a>
         </div>
     </footer>
 
@@ -226,13 +228,6 @@
             if (event.target === modal) {
                 closeContactForm();
             }
-        }
-
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
         }
     </script>
 </body>
