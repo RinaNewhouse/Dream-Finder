@@ -394,33 +394,6 @@ body:has(.menu__backdrop.show) .btn__menu {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Footer Styles */
-.footer {
-  width: 100%;
-  background-color: transparent;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  position: relative;
-  z-index: 10;
-  margin-top: auto;
-}
-
-.footer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: -1;
-}
-
-#movies .footer {
-  margin-top: auto;
-  flex-shrink: 0;
-}
-
 /* Landing Page Layout */
 #landing {
   padding-top: 80px;
@@ -1032,59 +1005,11 @@ input:focus {
   filter: blur(3px);
 }
 
-/* Movies Page Styles */
-#movies .footer__content {
-  margin-top: auto;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 24px;
-}
-
 .movies__list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 32px;
   padding: 20px 0;
-}
-
-/* Footer Styles */
-.footer {
-  margin-top: auto;
-  width: 100%;
-  background-color: transparent;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  position: relative;
-  z-index: 10;
-}
-
-.footer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: -1;
-}
-
-.footer__copyright,
-.footer__info p {
-  color: white;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.footer__info {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-}
-
-/* Remove any conflicting styles */
-#movies .footer {
-  margin-top: auto;
 }
 
 /* Ensure proper spacing for pagination */
@@ -1980,20 +1905,44 @@ input:focus {
   align-items: center;
 }
 
-.footer__info p {
-  color: white;
-  font-size: 14px;
-  opacity: 0.9;
-  margin: 0;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
 #landing .footer__info p,
-#landing .footer__copyright {
+#landing .footer__copyright,
+#movie .footer__info p,
+#movie .footer__copyright {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .footer__info i.fa-heart {
+  color: #9468ff;
+  margin: 0 4px;
+  text-shadow: 2px 2px 4px rgba(45, 45, 63, 0.4),
+    0 0 20px rgba(148, 104, 255, 0.6);
+}
+
+.footer__movie {
+  margin-top: auto;
+  width: 100%;
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 10;
+}
+
+.footer__content--movie {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+.footer__info--movie {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.footer__info--movie i.fa-heart {
   color: #9468ff;
   margin: 0 4px;
   text-shadow: 2px 2px 4px rgba(45, 45, 63, 0.4),
