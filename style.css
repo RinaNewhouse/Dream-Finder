@@ -151,16 +151,12 @@ body {
 
 /* Base Navigation Styles */
 nav {
-  position: fixed !important;
-  top: 0;
   left: 0;
   right: 0;
   width: 100%;
-  padding: 16px 0;
+  padding: 20px 0;
   z-index: 1000;
-  background-color: var(--background-color);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: background-color var(--transition), box-shadow var(--transition);
+  background-color: transparent;
 }
 
 .nav__container {
@@ -217,19 +213,19 @@ nav {
 
 /* Mobile Menu Button */
 .btn__menu {
-  display: none;
   background: none;
   border: none;
   color: var(--text-color);
   font-size: 24px;
   cursor: pointer;
   padding: 8px;
+  transition: all 300ms ease;
+  z-index: 2001;
   width: 40px;
   height: 40px;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
-  transition: transform 300ms ease;
 }
 
 .btn__menu i {
@@ -246,17 +242,16 @@ nav {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--overlay-color);
-  backdrop-filter: blur(5px);
-  z-index: 1001;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background-color);
+  z-index: 9999;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 300ms ease, visibility 300ms ease;
+  transition: all 300ms ease;
 }
 
 .menu__backdrop.show {
@@ -338,45 +333,20 @@ body:has(.menu__backdrop.show) .btn__menu {
 }
 
 @media (max-width: 768px) {
-  nav {
-    padding: 12px 0;
-  }
-  
   .btn__menu {
     display: flex;
   }
-  
+
   .nav__links {
     display: none;
-  }
-  
-  #landing,
-  #movies {
-    padding-top: 64px;
-  }
-}
-
-@media (max-width: 480px) {
-  nav {
-    padding: 8px 0;
-  }
-  
-  #landing,
-  #movies {
-    padding-top: 56px;
-  }
-  
-  .nav__container {
-    padding: 0 16px;
   }
 }
 
 /* Movies Page Layout */
 #movies {
-  padding-top: 80px;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--background-color);
 }
 
 #movies .container {
@@ -394,16 +364,66 @@ body:has(.menu__backdrop.show) .btn__menu {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Landing Page Layout */
-#landing {
-  padding-top: 80px;
-  min-height: 100vh;
+/* Footer Styles */
+.footer {
+  width: 100%;
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   position: relative;
+  z-index: 10;
+  margin-top: auto;
 }
 
-#landing nav {
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: -1;
+}
+
+#movies .footer {
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+/* Mobile Menu Styles */
+@media (max-width: 768px) {
+  .btn__menu {
+    display: flex;
+  }
+
+  .nav__links {
+    display: none;
+  }
+
+  #movies {
+    padding-top: 90px;
+  }
+
+  #movies .container {
+    padding: 16px;
+  }
+}
+
+/* Landing Page Layout */
+#landing {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   background-color: transparent;
-  box-shadow: none;
+  transition: background-color var(--transition);
+  z-index: 1;
+}
+
+/* Movies Page Footer */
+#movies .footer {
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 /* Back to Top Button */
@@ -516,7 +536,6 @@ button:active {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin-top: clamp(160px, 25vh, 200px);
 }
 
 h1,
@@ -1005,11 +1024,59 @@ input:focus {
   filter: blur(3px);
 }
 
+/* Movies Page Styles */
+#movies .footer__content {
+  margin-top: auto;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
 .movies__list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 32px;
   padding: 20px 0;
+}
+
+/* Footer Styles */
+.footer {
+  margin-top: auto;
+  width: 100%;
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 10;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: -1;
+}
+
+.footer__copyright,
+.footer__info p {
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.footer__info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Remove any conflicting styles */
+#movies .footer {
+  margin-top: auto;
 }
 
 /* Ensure proper spacing for pagination */
@@ -1905,44 +1972,20 @@ input:focus {
   align-items: center;
 }
 
+.footer__info p {
+  color: white;
+  font-size: 14px;
+  opacity: 0.9;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
 #landing .footer__info p,
-#landing .footer__copyright,
-#movie .footer__info p,
-#movie .footer__copyright {
+#landing .footer__copyright {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .footer__info i.fa-heart {
-  color: #9468ff;
-  margin: 0 4px;
-  text-shadow: 2px 2px 4px rgba(45, 45, 63, 0.4),
-    0 0 20px rgba(148, 104, 255, 0.6);
-}
-
-.footer__movie {
-  margin-top: auto;
-  width: 100%;
-  background-color: transparent;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  position: relative;
-  z-index: 10;
-}
-
-.footer__content--movie {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 24px;
-}
-
-.footer__info--movie {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-}
-
-.footer__info--movie i.fa-heart {
   color: #9468ff;
   margin: 0 4px;
   text-shadow: 2px 2px 4px rgba(45, 45, 63, 0.4),
@@ -1981,7 +2024,7 @@ input:focus {
 
   .header__description {
     padding: 0 16px;
-    margin-top: clamp(140px, 22vh, 180px);
+    margin-top: auto;
   }
 }
 
@@ -1992,20 +2035,6 @@ input:focus {
 
   .header__description {
     padding: 0 12px;
-    margin-top: clamp(120px, 20vh, 160px);
-  }
-}
-
-/* Height-based adjustments */
-@media (max-height: 700px) {
-  .header__description {
-    margin-top: clamp(120px, 20vh, 140px);
-  }
-}
-
-@media (min-height: 800px) {
-  .header__description {
-    margin-top: clamp(180px, 28vh, 220px);
   }
 }
 

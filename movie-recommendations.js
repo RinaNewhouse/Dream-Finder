@@ -1,3 +1,6 @@
+// OpenAI API configuration
+const OPENAI_API_KEY = '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';
+
 // Function to generate personalized movie recommendations
 async function generatePersonalizedRecommendations(movie) {
     // Log movie details for debugging
