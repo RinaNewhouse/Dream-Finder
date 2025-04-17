@@ -739,10 +739,6 @@ input:focus {
 }
 
 @media (max-width: 550px) {
-  #landing {
-    padding-top: clamp(90px, 12vh, 120px);
-  }
-
   h1 {
     font-size: 36px;
     line-height: 1.2;
@@ -810,15 +806,11 @@ input:focus {
 }
 
 @media (max-width: 400px) {
-  #landing {
-    padding-top: clamp(80px, 10vh, 100px);
-  }
-
   h1 {
-    font-size: 32px;
+    font-size: 36px;
     line-height: 1.2;
     padding: 0 8px;
-    margin-bottom: 12px;
+    margin: 32px 0 24px 0;
   }
 
   h2 {
@@ -834,12 +826,12 @@ input:focus {
 
   input {
     padding: 0 50px 0 16px;
-    font-size: 13px;
+    font-size: 18px;
     height: 55px;
   }
 
   input::placeholder {
-    font-size: 13px;
+    font-size: 14px;
     max-width: 75%;
   }
 
@@ -2381,5 +2373,121 @@ input:focus {
         min-height: 44px;
         min-width: 44px;
         padding: 12px;
+    }
+}
+
+/* Responsive styles for small devices (375x667) */
+@media (max-width: 375px) {
+    .header {
+        padding: 12px;
+        height: 100vh;
+    }
+
+    .header__content {
+        padding: 0 16px;
+        margin-top: 48px;
+    }
+
+    .header__description {
+        font-size: 16px;
+        margin: 16px 0 16px;
+        max-width: 100%;
+    }
+
+    .header__title {
+        font-size: 36px;
+        margin-bottom: 12px;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+
+    .nav__link {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .nav__links {
+        gap: 16px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .menu__backdrop {
+        padding: 24px;
+    }
+
+    .menu__links {
+        margin-top: 48px;
+        gap: 24px;
+    }
+
+    .menu__link {
+        font-size: 20px;
+    }
+
+    .btn__menu,
+    .btn__menu--close {
+        width: 32px;
+        height: 32px;
+    }
+
+    .footer__info {
+        flex-direction: column;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .footer__copyright {
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .contact__modal {
+        padding: 20px;
+        width: 90%;
+        max-height: 90vh;
+    }
+
+    .contact__form {
+        gap: 16px;
+    }
+
+    .form__group {
+        gap: 8px;
+    }
+
+    .form__input,
+    .form__textarea {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    .form__label {
+        font-size: 14px;
+    }
+
+    .contact__submit-btn {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+
+    .contact__close-btn {
+        top: 12px;
+        right: 12px;
+        width: 24px;
+        height: 24px;
+    }
+
+    .video__background {
+        height: 100vh;
+    }
+
+    .overlay {
+        height: 100vh;
     }
 }
