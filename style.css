@@ -423,6 +423,10 @@ body:has(.menu__backdrop.show) .btn__menu {
   .nav__links {
     display: none;
   }
+
+  #movies .container {
+    padding: 16px;
+  }
 }
 
 /* Landing Page Layout */
@@ -2029,9 +2033,9 @@ input:focus {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  #landing {
+  /* #landing {
     padding-top: clamp(90px, 12vh, 120px);
-  }
+  } */
 
   .header__description {
     padding: 0 16px;
@@ -2040,9 +2044,9 @@ input:focus {
 }
 
 @media (max-width: 480px) {
-  #landing {
+  /* #landing {
     padding-top: clamp(80px, 10vh, 100px);
-  }
+  } */
 
   .header__description {
     padding: 0 12px;
