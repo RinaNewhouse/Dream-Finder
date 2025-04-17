@@ -423,10 +423,6 @@ body:has(.menu__backdrop.show) .btn__menu {
   .nav__links {
     display: none;
   }
-
-  #movies .container {
-    padding: 16px;
-  }
 }
 
 /* Landing Page Layout */
