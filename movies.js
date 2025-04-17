@@ -82,6 +82,18 @@ function shuffleArray(array) {
     return array;
 }
 
+// Function to generate a rating with 85% chance of 4+ stars
+function generateRating() {
+    const random = Math.random();
+    if (random < 0.9) {
+        // 90% chance of 4-5 stars
+        return (Math.random() * 1 + 4).toFixed(1);
+    } else {
+        // 10% chance of 3.5-4 stars
+        return (Math.random() * 0.5 + 3.5).toFixed(1);
+    }
+}
+
 // Initialize the page
 async function init() {
     showLoading();
@@ -118,7 +130,7 @@ async function init() {
             const detailedMovies = await Promise.all(
                 shuffledMovies.slice(0, 40).map(async movie => {
                     const details = await fetchMovieDetails(movie.imdbID);
-                    const rating = (Math.random() * 1.5 + 3.5).toFixed(1);
+                    const rating = generateRating();
                     const year = details.Year || movie.Year;
                     return { ...movie, ...details, rating, Year: year };
                 })
@@ -138,8 +150,8 @@ async function init() {
         const detailedMovies = await Promise.all(
             initialMovies.map(async movie => {
                 const details = await fetchMovieDetails(movie.imdbID);
-                const rating = (Math.random() * 1.5 + 3.5).toFixed(1);
-                const year = details.Year || movie.Year;
+                const rating = generateRating();
+                const year = details.Year ? details.Year.split('–')[0] : movie.Year;
                 return { ...movie, ...details, rating, Year: year };
             })
         );
@@ -450,8 +462,7 @@ async function performSearch(query) {
             const detailedMovies = await Promise.all(
                 initialMovies.map(async movie => {
                     const details = await fetchMovieDetails(movie.imdbID);
-                    const rating = (Math.random() * 1.5 + 3.5).toFixed(1);
-                    // Ensure Year is properly formatted
+                    const rating = generateRating();
                     const year = details.Year ? details.Year.split('–')[0] : movie.Year;
                     return { ...movie, ...details, rating, Year: year };
                 })
