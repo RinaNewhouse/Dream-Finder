@@ -349,6 +349,158 @@ function prevPage() {
     }
 }
 
+// Function to check if a movie matches a genre query
+function matchesGenreQuery(movie, query) {
+    if (!movie.Genre) return false;
+    
+    const movieGenres = movie.Genre.toLowerCase();
+    const searchTerms = query.toLowerCase().split(' ');
+    
+    // Handle special cases
+    if (query.toLowerCase() === 'rom-com' || query.toLowerCase() === 'romcom') {
+        return movieGenres.includes('romance') && movieGenres.includes('comedy');
+    }
+    
+    // Check if all search terms appear in the genre list
+    return searchTerms.every(term => {
+        if (term === 'romantic') return movieGenres.includes('romance');
+        return movieGenres.includes(term);
+    });
+}
+
+// Function to perform search
+async function performSearch(query) {
+    if (!query.trim()) return;
+    
+    showLoading();
+    
+    try {
+        const ratingSearch = extractRatingFromQuery(query);
+        const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&s=${encodeURIComponent(query)}&type=movie`);
+        const data = await response.json();
+        let titleMovies = [];
+        let actorMovies = [];
+        let genreMovies = [];
+        
+        // Get movies with matching titles
+        if (data.Response === 'True') {
+            const searchWords = query.toLowerCase().split(' ');
+            const initialMovies = data.Search.filter(movie => {
+                const title = movie.Title.toLowerCase();
+                return searchWords.some(word => title.includes(word));
+            });
+            
+            // Fetch details for title-matched movies
+            titleMovies = await Promise.all(
+                initialMovies.map(async movie => {
+                    const details = await fetchMovieDetails(movie.imdbID);
+                    const rating = generateRating();
+                    const year = details.Year ? details.Year.split('–')[0] : movie.Year;
+                    return { ...movie, ...details, rating, Year: year };
+                })
+            );
+
+            // Search for movies by actor name in the existing movies array
+            actorMovies = movies.filter(movie => {
+                if (!movie.Actors) return false;
+                const actors = movie.Actors.toLowerCase();
+                const searchTerms = query.toLowerCase().split(' ');
+                return searchTerms.every(term => actors.includes(term));
+            });
+
+            // Search for movies by genre
+            genreMovies = movies.filter(movie => matchesGenreQuery(movie, query));
+
+            // Also search OMDB specifically for the actor
+            const actorResponse = await fetch(`${BASE_URL}?apikey=${API_KEY}&s=${encodeURIComponent(query)}&type=movie`);
+            const actorData = await actorResponse.json();
+            
+            if (actorData.Response === 'True') {
+                const actorInitialMovies = actorData.Search;
+                const actorDetailedMovies = await Promise.all(
+                    actorInitialMovies.map(async movie => {
+                        const details = await fetchMovieDetails(movie.imdbID);
+                        if (details && details.Actors && details.Actors.toLowerCase().includes(query.toLowerCase())) {
+                            const rating = generateRating();
+                            const year = details.Year ? details.Year.split('–')[0] : movie.Year;
+                            return { ...movie, ...details, rating, Year: year };
+                        }
+                        return null;
+                    })
+                );
+                // Filter out null values and add to actorMovies
+                actorMovies = [...actorMovies, ...actorDetailedMovies.filter(m => m !== null)];
+            }
+
+            // Additional search for genre-specific movies
+            const genreResponse = await fetch(`${BASE_URL}?apikey=${API_KEY}&s=${encodeURIComponent(query)}&type=movie`);
+            const genreData = await genreResponse.json();
+            
+            if (genreData.Response === 'True') {
+                const genreInitialMovies = genreData.Search;
+                const genreDetailedMovies = await Promise.all(
+                    genreInitialMovies.map(async movie => {
+                        const details = await fetchMovieDetails(movie.imdbID);
+                        if (details && matchesGenreQuery(details, query)) {
+                            const rating = generateRating();
+                            const year = details.Year ? details.Year.split('–')[0] : movie.Year;
+                            return { ...movie, ...details, rating, Year: year };
+                        }
+                        return null;
+                    })
+                );
+                // Filter out null values and add to genreMovies
+                genreMovies = [...genreMovies, ...genreDetailedMovies.filter(m => m !== null)];
+            }
+        }
+        
+        // If it's a rating search, include movies with that rating
+        if (ratingSearch) {
+            const ratedMovies = movies.filter(movie => {
+                const movieRating = parseFloat(movie.rating);
+                return Math.abs(movieRating - ratingSearch) <= 0.2;
+            });
+            
+            // Combine all results and deduplicate
+            const allMovies = [...titleMovies, ...actorMovies, ...genreMovies, ...ratedMovies];
+            const uniqueMovies = [...new Map(allMovies.map(movie => [movie.imdbID, movie])).values()];
+            
+            movies = uniqueMovies;
+            filteredMovies = [...movies];
+            currentPage = 1;
+            updatePagination();
+            renderMovies();
+            
+            const resultText = uniqueMovies.length === 0 
+                ? 'No movies found' 
+                : `Movies with "${query}" in title, cast, genre, or ${ratingSearch} star rating`;
+            document.querySelector('.movies__header h2').textContent = resultText;
+        } else {
+            // Combine all results and deduplicate
+            const allMovies = [...titleMovies, ...actorMovies, ...genreMovies];
+            const uniqueMovies = [...new Map(allMovies.map(movie => [movie.imdbID, movie])).values()];
+            
+            movies = uniqueMovies;
+            filteredMovies = [...movies];
+            currentPage = 1;
+            updatePagination();
+            renderMovies();
+            
+            const resultText = uniqueMovies.length === 0 
+                ? 'No movies found' 
+                : `Movies with "${query}" in title, cast, or genre`;
+            document.querySelector('.movies__header h2').textContent = resultText;
+        }
+    } catch (error) {
+        console.error('Error searching movies:', error);
+        movies = [];
+        filteredMovies = [];
+        renderMovies();
+    } finally {
+        hideLoading();
+    }
+}
+
 // Filter movies based on selected filters
 function filterMovies() {
     const selectedGenre = genreFilter.value;
@@ -357,8 +509,14 @@ function filterMovies() {
 
     filteredMovies = movies.filter(movie => {
         // Genre filter
-        const genreMatch = selectedGenre === 'all' || 
-            movie.Genre.toLowerCase().includes(selectedGenre.toLowerCase());
+        let genreMatch = selectedGenre === 'all';
+        if (!genreMatch && movie.Genre) {
+            if (selectedGenre === 'romance') {
+                genreMatch = movie.Genre.toLowerCase().includes('romance');
+            } else {
+                genreMatch = movie.Genre.toLowerCase().includes(selectedGenre.toLowerCase());
+            }
+        }
 
         // Rating filter
         const movieRating = parseFloat(movie.rating);
@@ -414,14 +572,14 @@ document.addEventListener('DOMContentLoaded', function() {
     init();
 
     // Add event listeners for filters
-    genreFilter.addEventListener('change', filterMovies);
-    ratingFilter.addEventListener('change', filterMovies);
-    yearFilter.addEventListener('change', filterMovies);
-    moviesPerPageSelect.addEventListener('change', updateMoviesPerPage);
+genreFilter.addEventListener('change', filterMovies);
+ratingFilter.addEventListener('change', filterMovies);
+yearFilter.addEventListener('change', filterMovies);
+moviesPerPageSelect.addEventListener('change', updateMoviesPerPage);
 
     // Add event listeners for pagination
-    prevPageBtn.addEventListener('click', prevPage);
-    nextPageBtn.addEventListener('click', nextPage);
+prevPageBtn.addEventListener('click', prevPage);
+nextPageBtn.addEventListener('click', nextPage);
 
     // Add event listener for search
     searchButton.addEventListener('click', function() {
@@ -441,53 +599,27 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Function to perform search
-async function performSearch(query) {
-    if (!query.trim()) return;
+// Function to convert text numbers to numeric values
+function convertTextToNumber(text) {
+    const numberMap = {
+        'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+        'un': 1, 'dos': 2, 'tres': 3, 'cuatro': 4, 'cinco': 5
+    };
+    return numberMap[text.toLowerCase()] || text;
+}
+
+// Function to extract rating from search query
+function extractRatingFromQuery(query) {
+    // Match patterns like "3 stars", "three stars", "3.5 stars", etc.
+    const ratingPattern = /(\d+\.?\d*|one|two|three|four|five)\s*-?\s*stars?/i;
+    const match = query.match(ratingPattern);
     
-    showLoading();
-    
-    try {
-        const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&s=${encodeURIComponent(query)}&type=movie`);
-        const data = await response.json();
-        
-        if (data.Response === 'True') {
-            const searchWords = query.toLowerCase().split(' ');
-            const initialMovies = data.Search.filter(movie => {
-                const title = movie.Title.toLowerCase();
-                return searchWords.some(word => title.includes(word));
-            });
-            
-            // Fetch details for each movie
-            const detailedMovies = await Promise.all(
-                initialMovies.map(async movie => {
-                    const details = await fetchMovieDetails(movie.imdbID);
-                    const rating = generateRating();
-                    const year = details.Year ? details.Year.split('–')[0] : movie.Year;
-                    return { ...movie, ...details, rating, Year: year };
-                })
-            );
-            
-            movies = detailedMovies;
-            filteredMovies = [...movies];
-            currentPage = 1;
-            updatePagination();
-            renderMovies();
-            
-            document.querySelector('.movies__header h2').textContent = `Search Results for "${query}"`;
-        } else {
-            movies = [];
-            filteredMovies = [];
-            renderMovies();
-        }
-    } catch (error) {
-        console.error('Error searching movies:', error);
-        movies = [];
-        filteredMovies = [];
-        renderMovies();
-    } finally {
-        hideLoading();
+    if (match) {
+        const ratingText = match[1].toLowerCase();
+        const numericRating = convertTextToNumber(ratingText);
+        return parseFloat(numericRating);
     }
+    return null;
 }
 
 function generateStarRating(rating) {
