@@ -1013,6 +1013,11 @@ input:focus {
   font-size: 20px;
   color: var(--text-color);
   transition: all 300ms ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .theme-toggle:hover {
@@ -2375,8 +2380,8 @@ input:focus {
     }
 }
 
-/* Responsive styles for small devices (375x667) */
-@media (max-width: 375px) {
+/* Responsive styles for small devices (400x667) */
+@media (max-width: 400px) {
     .header {
         padding: 12px;
         height: 100vh;
@@ -2430,9 +2435,14 @@ input:focus {
     }
 
     .btn__menu,
-    .btn__menu--close {
+    .btn__menu--close,
+    .theme-toggle {
         width: 32px;
         height: 32px;
+        padding: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .footer__info {
@@ -2444,50 +2454,6 @@ input:focus {
     .footer__copyright {
         font-size: 12px;
         text-align: center;
-    }
-
-    .contact__modal {
-        padding: 20px;
-        width: 90%;
-        max-height: 90vh;
-    }
-
-    .contact__form {
-        gap: 16px;
-    }
-
-    .form__group {
-        gap: 8px;
-    }
-
-    .form__input,
-    .form__textarea {
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-
-    .form__label {
-        font-size: 14px;
-    }
-
-    .contact__submit-btn {
-        padding: 12px 24px;
-        font-size: 14px;
-    }
-
-    .contact__close-btn {
-        top: 12px;
-        right: 12px;
-        width: 24px;
-        height: 24px;
-    }
-
-    .video__background {
-        height: 100vh;
-    }
-
-    .overlay {
-        height: 100vh;
     }
 }
 
