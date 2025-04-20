@@ -79,14 +79,14 @@ async function init() {
     showLoading();
     
     try {
-        if (searchQuery.toLowerCase() === 'all movies') {
-            const popularSearches = [
-                'action', 'comedy', 'drama', 'thriller',
-                'adventure', 'sci-fi', 'romance', 'horror',
-                'fantasy', 'animation', 'mystery', 'crime'
-            ];
-            const allMovies = [];
-            
+    if (searchQuery.toLowerCase() === 'all movies') {
+        const popularSearches = [
+            'action', 'comedy', 'drama', 'thriller',
+            'adventure', 'sci-fi', 'romance', 'horror',
+            'fantasy', 'animation', 'mystery', 'crime'
+        ];
+        const allMovies = [];
+        
             console.log('Fetching popular movies...');
             const promises = popularSearches.map(term => fetchMovies(term));
             const results = await Promise.all(promises);
@@ -118,38 +118,38 @@ async function init() {
             
             // Shuffle the movies array
             movies = shuffleArray(detailedMovies);
-        } else {
+    } else {
             console.log('Fetching movies for search:', searchQuery);
-            const response = await fetchMovies(searchQuery);
-            const initialMovies = response.Search || [];
+        const response = await fetchMovies(searchQuery);
+        const initialMovies = response.Search || [];
             
             console.log('Initial movies found:', initialMovies.length);
-            
-            // Fetch details for each movie
-            const detailedMovies = await Promise.all(
-                initialMovies.map(async movie => {
-                    const details = await fetchMovieDetails(movie.imdbID);
+        
+        // Fetch details for each movie
+        const detailedMovies = await Promise.all(
+            initialMovies.map(async movie => {
+                const details = await fetchMovieDetails(movie.imdbID);
                     if (!details) return null;
-                    const rating = (Math.random() * 1.5 + 3.5).toFixed(1);
-                    const year = details.Year || movie.Year;
-                    return { ...movie, ...details, rating, Year: year };
-                })
+                const rating = (Math.random() * 1.5 + 3.5).toFixed(1);
+                const year = details.Year || movie.Year;
+                return { ...movie, ...details, rating, Year: year };
+            })
             ).then(movies => movies.filter(movie => movie !== null));
             
             console.log('Detailed movies:', detailedMovies.length);
-            
+        
             // Shuffle the movies array
             movies = shuffleArray(detailedMovies);
-        }
-        
-        filteredMovies = [...movies];
-        updatePagination();
-        renderMovies();
-        
-        document.querySelector('.movies__header h2').textContent = 
-            searchQuery.toLowerCase() === 'all movies' 
-                ? 'All Movies' 
-                : `Search Results for "${searchQuery}"`;
+    }
+    
+    filteredMovies = [...movies];
+    updatePagination();
+    renderMovies();
+    
+    document.querySelector('.movies__header h2').textContent = 
+        searchQuery.toLowerCase() === 'all movies' 
+            ? 'All Movies' 
+            : `Search Results for "${searchQuery}"`;
     } catch (error) {
         console.error('Error in init:', error);
         movies = [];
@@ -193,11 +193,11 @@ function renderMovies() {
 
     moviesList.innerHTML = moviesToShow
         .map(movie => `
-            <div class="movie__card" data-id="${movie.imdbID}">
-                <div class="movie__img--wrapper">
+                <div class="movie__card" data-id="${movie.imdbID}">
+                    <div class="movie__img--wrapper">
                     <img src="${movie.Poster}" alt="${movie.Title}" class="movie__img">
-                </div>
-                <div class="movie__info">
+                    </div>
+                    <div class="movie__info">
                     <div class="movie__title-section">
                         <h3 class="movie__title">${movie.Title}</h3>
                     </div>

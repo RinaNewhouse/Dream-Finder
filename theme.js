@@ -33,3 +33,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 }); 
 // Initialize theme when DOM is loaded
+document.addEventListener('DOMContentLoaded', initializeTheme); 
