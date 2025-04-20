@@ -14,10 +14,13 @@
         }
     </style>
     <link rel="stylesheet" href="style.css">
-    <script src="theme.js"></script>
+    <script src="theme.js" defer></script>
     <script src="movies.js" defer></script>
     <script src="https://kit.fontawesome.com/42d214a21a.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="burger-menu.js" defer></script>
+    <script src="contact.js" defer></script>
+    <script src="movie-recommendations.js" defer></script>
 </head>
 <body>
     <nav>
@@ -167,6 +170,21 @@
             </button>
         </div>
     </footer>
+
+    <!-- Movie Details Popup -->
+    <div class="movie__details-backdrop"></div>
+    <div class="movie__details">
+        <button class="movie__details-close">×</button>
+        <h2 class="movie__details-title"></h2>
+        <div class="movie__summary">
+            <h4>Overview</h4>
+            <p></p>
+        </div>
+        <div class="movie__recommendations">
+            <h4>You might also like</h4>
+            <ul></ul>
+        </div>
+    </div>
 
     <script>
         // Initialize EmailJS
