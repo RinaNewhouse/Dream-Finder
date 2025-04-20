@@ -10,7 +10,9 @@ const BASE_URL = 'https://www.omdbapi.com/';
 const moviesList = document.querySelector('.movies__list');
 const loadingSpinner = document.querySelector('.movies__loading');
 const genreFilter = document.getElementById('genreFilter');
+const movieRatingFilter = document.getElementById('movieRatingFilter');
 const ratingFilter = document.getElementById('ratingFilter');
+const yearFilter = document.getElementById('yearFilter');
 const moviesPerPageSelect = document.getElementById('moviesPerPage');
 const prevPageBtn = document.getElementById('prevPage');
 const nextPageBtn = document.getElementById('nextPage');
@@ -291,6 +293,7 @@ async function prevPage() {
 // Filter movies based on selected filters
 function filterMovies() {
     const selectedGenre = genreFilter.value;
+    const selectedMovieRating = movieRatingFilter.value;
     const selectedRating = ratingFilter.value;
     const selectedYear = yearFilter.value;
 
@@ -299,8 +302,12 @@ function filterMovies() {
         const genreMatch = selectedGenre === 'all' || 
             movie.Genre.toLowerCase().includes(selectedGenre.toLowerCase());
 
-        // Rating filter
-        const movieRating = parseFloat(movie.rating);
+        // Movie rating filter (G, PG, etc.)
+        const movieRatingMatch = selectedMovieRating === 'all' || 
+            (movie.Rated && movie.Rated.toUpperCase() === selectedMovieRating.toUpperCase());
+
+        // Star rating filter
+        const movieRating = parseFloat(movie.imdbRating);
         let ratingMatch = true;
         
         if (selectedRating !== 'all') {
@@ -320,7 +327,7 @@ function filterMovies() {
             yearMatch = !isNaN(movieYear) && movieYear >= startYear && movieYear <= endYear;
         }
 
-        return genreMatch && ratingMatch && yearMatch;
+        return genreMatch && movieRatingMatch && ratingMatch && yearMatch;
     });
 
     currentPage = 1;
@@ -350,6 +357,7 @@ function hideLoading() {
 
 // Event listeners
 genreFilter.addEventListener('change', filterMovies);
+movieRatingFilter.addEventListener('change', filterMovies);
 ratingFilter.addEventListener('change', filterMovies);
 yearFilter.addEventListener('change', filterMovies);
 moviesPerPageSelect.addEventListener('change', updateMoviesPerPage);
@@ -565,6 +573,7 @@ menuBackdrop.addEventListener('click', (e) => {
 async function clearFilters() {
     // Reset filter values and ensure default options are selected
     genreFilter.selectedIndex = 0;  // First option is "All Genres"
+    movieRatingFilter.selectedIndex = 0;  // First option is "All Ratings"
     ratingFilter.selectedIndex = 0;  // First option is "All Ratings"
     yearFilter.selectedIndex = 0;  // First option is "All Years"
     moviesPerPageSelect.selectedIndex = 0;  // First option is "Show 10"
