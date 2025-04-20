@@ -120,6 +120,14 @@ h2.animate-text {
 }
 
 /* Logo color adjustments */
+.nav__container a {
+  transition: all 300ms ease;
+}
+
+.nav__container a:hover {
+  transform: translateY(-2px);
+}
+
 .logo {
   width: 32px;
   height: 32px;
