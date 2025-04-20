@@ -371,39 +371,210 @@ async function performSearch(query) {
     showLoading();
     
     try {
-        const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&s=${encodeURIComponent(query)}&type=movie`);
-        const data = await response.json();
+        let allResults = [];
+        const searchTerms = [];
+        const queryLower = query.toLowerCase();
         
-        if (data.Response === 'True') {
-            const searchWords = query.toLowerCase().split(' ');
-            const initialMovies = data.Search.filter(movie => {
-                const title = movie.Title.toLowerCase();
-                return searchWords.some(word => title.includes(word));
-            });
+        // Handle Disney searches
+        if (queryLower.includes('disney')) {
+            // Use specific search terms that work with OMDB
+            searchTerms.push(
+                'disney',
+                'walt disney',
+                'pixar',
+                'disney animation',
+                'disney pixar',
+                'disney princess',
+                'disney fairy tale',
+                'frozen',
+                'moana',
+                'coco',
+                'tangled',
+                'lion king',
+                'aladdin',
+                'beauty and the beast',
+                'mulan',
+                'zootopia',
+                'big hero 6',
+                'wreck it ralph',
+                'princess and the frog',
+                'raya',
+                'inside out',
+                'encanto',
+                'luca',
+                'soul',
+                'onward',
+                'elemental'
+            );
+        } 
+        // Handle family-friendly searches
+        else if (queryLower.includes('kid friendly') || queryLower.includes('family friendly') || 
+                 queryLower.includes('family') || queryLower.includes('kids')) {
+            // Search for popular family-friendly movies and genres
+            searchTerms.push(
+                'disney',
+                'pixar',
+                'dreamworks',
+                'illumination',
+                'animation',
+                'family',
+                'musical',
+                'adventure',
+                'comedy',
+                'fantasy',
+                'frozen',
+                'moana',
+                'coco',
+                'tangled',
+                'lion king',
+                'aladdin',
+                'beauty and the beast',
+                'zootopia',
+                'big hero 6',
+                'wreck it ralph',
+                'princess and the frog',
+                'inside out',
+                'encanto',
+                'toy story',
+                'finding nemo',
+                'up',
+                'cars',
+                'incredibles',
+                'monsters inc',
+                'wall-e',
+                'ratatouille'
+            );
+        }
+        else {
+            searchTerms.push(query);
+        }
+
+        // Fetch results for all search terms
+        for (const term of searchTerms) {
+            try {
+                const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&s=${encodeURIComponent(term)}&type=movie`);
+                const data = await response.json();
+                
+                if (data.Response === 'True' && data.Search) {
+                    allResults.push(...data.Search);
+                }
+            } catch (error) {
+                console.error(`Error fetching results for term "${term}":`, error);
+            }
+        }
+
+        // Remove duplicates based on imdbID
+        allResults = [...new Map(allResults.map(movie => [movie.imdbID, movie])).values()];
+
+        // Filter and sort results
+        const searchWords = queryLower.split(' ');
+        let initialMovies = allResults.filter(movie => {
+            const title = movie.Title.toLowerCase();
+            const year = parseInt(movie.Year);
             
-            // Fetch details for each movie
-            const detailedMovies = await Promise.all(
-                initialMovies.map(async movie => {
+            // Filter out inappropriate content and unreleased movies
+            if (year > new Date().getFullYear() || isNaN(year)) {
+                return false;
+            }
+
+            // List of words that indicate inappropriate content
+            const excludeWords = [
+                'killed', 'murder', 'meathook', 'lesbian', 'gore', 'slaughter', 'massacre',
+                'documentary', 'behind the scenes', 'making of', 'untold', 'real',
+                'untitled', 'project', 'development', 'announced', 'upcoming'
+            ];
+            
+            if (excludeWords.some(word => title.includes(word))) {
+                return false;
+            }
+
+            // For Disney searches, ensure it's a Disney/Pixar film
+            if (queryLower.includes('disney')) {
+                const disneyIndicators = [
+                    'disney', 'pixar', 'animation', 'animated',
+                    'princess', 'fairy tale', 'walt disney'
+                ];
+
+                return disneyIndicators.some(indicator => title.includes(indicator)) ||
+                       disneyIndicators.some(indicator => movie.Type?.toLowerCase().includes(indicator));
+            }
+
+            // For family-friendly searches, ensure appropriate rating
+            if (queryLower.includes('kid friendly') || queryLower.includes('family friendly') || 
+                queryLower.includes('family') || queryLower.includes('kids')) {
+                // First fetch the movie details to get the rating
+                return true; // We'll filter by rating after fetching details
+            }
+
+            return searchWords.some(word => title.includes(word));
+        });
+
+        // Fetch details for each movie
+        const detailedMovies = await Promise.all(
+            initialMovies.map(async movie => {
+                try {
                     const details = await fetchMovieDetails(movie.imdbID);
+                    if (!details) return null;
+                    
+                    // For family-friendly searches, filter by rating after getting details
+                    if (queryLower.includes('kid friendly') || queryLower.includes('family friendly') || 
+                        queryLower.includes('family') || queryLower.includes('kids')) {
+                        if (!['G', 'PG', 'PG-13'].includes(details.Rated)) {
+                            return null;
+                        }
+                    }
+                    
                     const rating = (Math.random() * 1.5 + 3.5).toFixed(1);
-                    // Ensure Year is properly formatted
                     const year = details.Year ? details.Year.split('–')[0] : movie.Year;
                     return { ...movie, ...details, rating, Year: year };
-                })
-            );
-            
-            movies = detailedMovies;
-            filteredMovies = [...movies];
-            currentPage = 1;
-            updatePagination();
-            renderMovies();
-            
-            document.querySelector('.movies__header h2').textContent = `Search Results for "${query}"`;
-        } else {
-            movies = [];
-            filteredMovies = [];
-            renderMovies();
+                } catch (error) {
+                    console.error(`Error fetching details for movie ${movie.imdbID}:`, error);
+                    return null;
+                }
+            })
+        ).then(movies => movies.filter(movie => movie !== null));
+
+        // Sort results
+        if (queryLower.includes('disney')) {
+            detailedMovies.sort((a, b) => {
+                const titleA = a.Title.toLowerCase();
+                const titleB = b.Title.toLowerCase();
+                
+                // Prioritize animated movies
+                const isAnimatedA = titleA.includes('animation') || titleA.includes('animated');
+                const isAnimatedB = titleB.includes('animation') || titleB.includes('animated');
+                
+                if (isAnimatedA && !isAnimatedB) return -1;
+                if (!isAnimatedA && isAnimatedB) return 1;
+                
+                // Then sort by year (newer first)
+                return parseInt(b.Year) - parseInt(a.Year);
+            });
         }
+        else if (queryLower.includes('kid friendly') || queryLower.includes('family friendly') || 
+                 queryLower.includes('family') || queryLower.includes('kids')) {
+            detailedMovies.sort((a, b) => {
+                // Sort by rating (G first, then PG, then PG-13)
+                const ratingOrder = { 'G': 1, 'PG': 2, 'PG-13': 3 };
+                const ratingA = ratingOrder[a.Rated] || 4;
+                const ratingB = ratingOrder[b.Rated] || 4;
+                
+                if (ratingA !== ratingB) {
+                    return ratingA - ratingB;
+                }
+                
+                // Then sort by year (newer first)
+                return parseInt(b.Year) - parseInt(a.Year);
+            });
+        }
+        
+        movies = detailedMovies;
+        filteredMovies = [...movies];
+        currentPage = 1;
+        updatePagination();
+        renderMovies();
+        
+        document.querySelector('.movies__header h2').textContent = `Search Results for "${query}"`;
     } catch (error) {
         console.error('Error searching movies:', error);
         movies = [];
