@@ -32,11 +32,4 @@ document.addEventListener('DOMContentLoaded', function() {
         themeToggle.addEventListener('click', toggleTheme);
     }
 }); 
-    if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
-    }
-}); 
-    if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
-    }
-}); 
+// Initialize theme when DOM is loaded

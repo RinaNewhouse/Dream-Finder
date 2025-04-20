@@ -143,3 +143,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 }); 
+// Close menu when clicking outside
+window.addEventListener('click', function(event) {
+    const menu = document.querySelector('.menu__backdrop');
+    if (event.target === menu) {
+        closeMenu();
+    }
+}); 

@@ -23,37 +23,10 @@ document.addEventListener('DOMContentLoaded', function() {
         searchButton.addEventListener('click', handleSearch);
     }
 }); 
-        const searchQuery = searchInput.value.trim();
-        
-        if (searchQuery) {
-            window.location.href = `movies.html?search=${encodeURIComponent(searchQuery)}`;
-        } else {
-            searchInput.focus();
-        }
-    }
+// Menu functionality
+function openMenu() {
+    document.body.classList.add('menu--open');
+}
 
-    if (searchForm) {
-        searchForm.addEventListener('submit', handleSearch);
-    }
-
-    if (searchButton) {
-        searchButton.addEventListener('click', handleSearch);
-    }
-}); 
-        const searchQuery = searchInput.value.trim();
-        
-        if (searchQuery) {
-            window.location.href = `movies.html?search=${encodeURIComponent(searchQuery)}`;
-        } else {
-            searchInput.focus();
-        }
-    }
-
-    if (searchForm) {
-        searchForm.addEventListener('submit', handleSearch);
-    }
-
-    if (searchButton) {
-        searchButton.addEventListener('click', handleSearch);
-    }
-}); 
+function closeMenu() {
+    document.body.classList.remove('menu--open');

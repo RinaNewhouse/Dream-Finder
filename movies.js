@@ -191,6 +191,28 @@ function renderMovies() {
     const endIndex = moviesPerPage === 'all' ? filteredMovies.length : startIndex + moviesPerPage;
     const moviesToShow = filteredMovies.slice(startIndex, endIndex);
 
+    moviesList.innerHTML = moviesToShow
+        .map(movie => `
+            <div class="movie__card" data-id="${movie.imdbID}">
+                <div class="movie__img--wrapper">
+                    <img src="${movie.Poster}" alt="${movie.Title}" class="movie__img">
+                </div>
+                <div class="movie__info">
+                    <div class="movie__title-section">
+                        <h3 class="movie__title">${movie.Title}</h3>
+                    </div>
+                    <div class="movie__details-section">
+                        <p class="movie__year">${movie.Year}</p>
+                        <div class="movie__rating">
+                            ${generateStarRating(movie.rating)}
+                            <span>${movie.rating}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `)
+        .join('');
+
     // Create movie details popup elements if they don't exist
     if (!document.querySelector('.movie__details')) {
         const detailsHTML = `
@@ -230,23 +252,6 @@ function renderMovies() {
             backdrop.classList.remove('active');
         });
     }
-
-    // Render movie cards
-    moviesList.innerHTML = moviesToShow
-        .map(movie => `
-            <div class="movie__card" data-id="${movie.imdbID}">
-                <img src="${movie.Poster}" alt="${movie.Title}" class="movie__poster">
-                <div class="movie__info">
-                    <h3 class="movie__title">${movie.Title}</h3>
-                    <p class="movie__year">${movie.Year}</p>
-                    <div class="movie__rating">
-                        ${generateStarRating(movie.rating)}
-                        <span>${movie.rating}</span>
-                    </div>
-                </div>
-            </div>
-        `)
-        .join('');
 
     // Add click event listeners to movie cards
     document.querySelectorAll('.movie__card').forEach(card => {
