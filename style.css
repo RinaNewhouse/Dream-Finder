@@ -2167,3 +2167,14 @@ input:focus {
 [data-theme="light"] #movies .purple {
   color: var(--text-color);
 }
+
+.footer,
+.footer .footer__info p,
+.footer .footer__info i {
+  color: #ffffff !important;
+}
+
+[data-theme="light"] .footer__info p,
+[data-theme="light"] .footer__info i {
+  color: #000000 !important;
+}
