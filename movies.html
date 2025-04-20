@@ -21,6 +21,7 @@
     <script src="contact.js" defer></script>
     <script src="movies.js" defer></script>
     <script src="movie-recommendations.js" defer></script>
+    <script src="ui-handlers.js" defer></script>
 </head>
 <body>
     <nav>
@@ -31,7 +32,7 @@
             <ul class="nav__links">
                 <li><a href="index.html" class="nav__link">Home</a></li>
                 <li><a href="movies.html?search=all%20movies" class="nav__link">Find Movies</a></li>
-                <li><a href="#" class="nav__link nav__link--primary" onclick="openContactForm()">Contact</a></li>
+                <li><a href="#" class="nav__link nav__link--primary contact-link">Contact</a></li>
             </ul>
             <div class="nav__buttons">
                 <button class="theme-toggle nav__button">
@@ -110,7 +111,7 @@
                             <option value="1980">1980s</option>
                             <option value="1970">1970s</option>
                         </select>
-                        <button class="clear-filters-btn" onclick="clearFilters()">
+                        <button class="clear-filters-btn">
                             <i class="fas fa-times"></i> Clear Filters
                         </button>
                     </div>
@@ -139,11 +140,11 @@
     <!-- Contact Form Modal -->
     <div class="contact__modal" id="contactModal">
         <div class="contact__modal-content">
-            <button class="contact__close-btn" onclick="closeContactForm()">
+            <button class="contact__close-btn">
                 <i class="fas fa-times"></i>
             </button>
             <h2>Contact Us</h2>
-            <form id="contactForm" onsubmit="handleContactSubmit(event)">
+            <form id="contactForm">
                 <div class="form__group">
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" required>
@@ -167,93 +168,21 @@
                 <p>Made with <i class="fas fa-heart"></i> by Rina Newhouse</p>
                 <p>&copy; 2025 DreamFinder. All rights reserved.</p>
             </div>
-            <button onclick="scrollToTop()" class="back-to-top">
+            <button class="back-to-top">
                 <i class="fas fa-arrow-up"></i> Back to Top
             </button>
         </div>
     </footer>
 
     <!-- Movie Details Popup -->
-    <div class="movie__details-backdrop"></div>
     <div class="movie__details">
-        <button class="movie__details-close">×</button>
-        <h2 class="movie__details-title"></h2>
-        <div class="movie__summary">
-            <h4>Overview</h4>
-            <p></p>
-        </div>
-        <div class="movie__recommendations">
-            <h4>You might also like</h4>
-            <ul></ul>
+        <button class="movie__details-close">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="movie__details-content">
+            <!-- Content will be dynamically inserted here -->
         </div>
     </div>
-
-    <script>
-        // Initialize EmailJS
-        (function() {
-            emailjs.init("XZiqXvXGUZ2WaKUne");
-        })();
-
-        function openMenu() {
-            const backdrop = document.querySelector('.menu__backdrop');
-            backdrop.classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeMenu() {
-            const backdrop = document.querySelector('.menu__backdrop');
-            backdrop.classList.remove('show');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Contact Form Functions
-        function openContactForm() {
-            document.getElementById('contactModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeContactForm() {
-            document.getElementById('contactModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        function handleContactSubmit(event) {
-            event.preventDefault();
-            
-            const templateParams = {
-                from_name: document.getElementById('name').value,
-                from_email: document.getElementById('email').value,
-                message: document.getElementById('message').value
-            };
-
-            emailjs.send('service_8ev3m6g', 'template_nh7nrxg', templateParams)
-                .then(function(response) {
-                    alert('Message sent successfully!');
-                    closeContactForm();
-                    document.getElementById('contactForm').reset();
-                }, function(error) {
-                    alert('Failed to send message. Please try again.');
-                });
-        }
-
-        // Close menu when clicking outside
-        window.onclick = function(event) {
-            const menu = document.querySelector('.menu__backdrop');
-            const modal = document.getElementById('contactModal');
-            if (event.target === menu) {
-                closeMenu();
-            }
-            if (event.target === modal) {
-                closeContactForm();
-            }
-        }
-
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-    </script>
+    <div class="movie__details-backdrop"></div>
 </body>
 </html>

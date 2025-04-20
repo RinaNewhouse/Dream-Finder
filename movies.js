@@ -213,71 +213,13 @@ function renderMovies() {
         `)
         .join('');
 
-    // Create movie details popup elements if they don't exist
-    if (!document.querySelector('.movie__details')) {
-        const detailsHTML = `
-            <div class="movie__details">
-                <button class="movie__details-close">
-                    <i class="fas fa-times"></i>
-                </button>
-                <h2 class="movie__details-title"></h2>
-                <div class="movie__details-content">
-                    <p class="movie__details-summary"></p>
-                    <div class="movie__details-recommendations">
-                        <h3>You might also like:</h3>
-                        <ul class="recommendations__list"></ul>
-                    </div>
-                </div>
-            </div>
-            <div class="movie__details-backdrop"></div>
-        `;
-        document.body.insertAdjacentHTML('beforeend', detailsHTML);
-
-        // Get references to the new elements
-        const details = document.querySelector('.movie__details');
-        const detailsTitle = document.querySelector('.movie__details-title');
-        const summaryText = document.querySelector('.movie__details-summary');
-        const recommendationsList = document.querySelector('.recommendations__list');
-        const closeBtn = document.querySelector('.movie__details-close');
-        const backdrop = document.querySelector('.movie__details-backdrop');
-
-        // Add event listeners for closing details
-        closeBtn.addEventListener('click', () => {
-            details.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-
-        backdrop.addEventListener('click', () => {
-            details.classList.remove('active');
-            backdrop.classList.remove('active');
-        });
-    }
-
-    // Add click event listeners to movie cards
+    // Add click event listeners to all movie cards
     document.querySelectorAll('.movie__card').forEach(card => {
         card.addEventListener('click', () => {
             const movieId = card.dataset.id;
             const movie = filteredMovies.find(m => m.imdbID === movieId);
-            
             if (movie) {
-                const details = document.querySelector('.movie__details');
-                const detailsTitle = document.querySelector('.movie__details-title');
-                const summaryText = document.querySelector('.movie__details-summary');
-                const recommendationsList = document.querySelector('.recommendations__list');
-                const backdrop = document.querySelector('.movie__details-backdrop');
-
-                detailsTitle.textContent = movie.Title;
-                summaryText.textContent = movie.Plot;
-                
-                // Generate recommendations
-                const recommendations = generateRecommendations(movie);
-                recommendationsList.innerHTML = recommendations
-                    .map(rec => `<li>${rec}</li>`)
-                    .join('');
-                
-                // Show details popup
-                details.classList.add('active');
-                backdrop.classList.add('active');
+                showMovieDetails(movie);
             }
         });
     });
@@ -652,3 +594,55 @@ function scrollToTop() {
 
 // Call init when the page loads
 document.addEventListener('DOMContentLoaded', init);
+
+function showMovieDetails(movie) {
+    const details = document.querySelector('.movie__details');
+    const backdrop = document.querySelector('.movie__details-backdrop');
+    
+    // Fetch short plot instead of full plot
+    fetch(`${BASE_URL}?i=${movie.imdbID}&apikey=${API_KEY}&plot=short`)
+        .then(response => response.json())
+        .then(movieDetails => {
+            // Get recommendations using our generateRecommendations function
+            const recommendations = generateRecommendations(movieDetails);
+            
+            details.innerHTML = `
+                <button class="movie__details-close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h2 class="movie__details-title">${movieDetails.Title}</h2>
+                <div class="movie__details-info">
+                    <p><span>Year:</span> ${movieDetails.Year}</p>
+                    <p><span>Rating:</span> ${movieDetails.Rated}</p>
+                    <p><span>Runtime:</span> ${movieDetails.Runtime}</p>
+                    <p><span>Genre:</span> ${movieDetails.Genre}</p>
+                    <p><span>Director:</span> ${movieDetails.Director}</p>
+                    <p><span>Cast:</span> ${movieDetails.Actors}</p>
+                </div>
+                <div class="movie__summary">
+                    <h4>Summary</h4>
+                    <p>${movieDetails.Plot}</p>
+                </div>
+                <div class="movie__recommendations">
+                    <h4>You might like this movie if...</h4>
+                    <ul>
+                        ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+
+            // Show modal and backdrop
+            details.classList.add('show');
+            backdrop.classList.add('show');
+
+            // Add close functionality
+            const closeBtn = details.querySelector('.movie__details-close');
+            const closeModal = () => {
+                details.classList.remove('show');
+                backdrop.classList.remove('show');
+            };
+
+            closeBtn.addEventListener('click', closeModal);
+            backdrop.addEventListener('click', closeModal);
+        });
+}
