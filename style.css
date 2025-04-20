@@ -613,16 +613,149 @@ input:focus {
   position: relative;
   min-height: calc(100vh - 100px);
   background-color: var(--background-color);
-  padding: 90px 0 0;
+  padding-top: 120px;
   transition: background-color var(--transition);
+  flex: 1;
+  width: 100%;
+}
+
+#movies .container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+#movies .row {
+  width: 100%;
+}
+
+.movies__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+  padding: 24px 0;
+  width: 100%;
+  min-height: 200px;
+}
+
+.movie__card {
+  position: relative;
+  cursor: pointer;
+  transition: all 300ms ease;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--background-color);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.movie__img--wrapper {
+  width: 100%;
+  padding-top: 150%;
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.movie__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 300ms ease;
+}
+
+.movie__info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   flex: 1;
 }
 
-.container {
-  padding: 0 24px 32px;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: var(--background-color);
+.movie__title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.3;
+  color: var(--text-color);
+}
+
+.movie__year, .movie__type {
+  font-size: 14px;
+  color: var(--paragraph-color);
+  margin: 0;
+}
+
+.movie__rating {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Theme icon fixes for movies page */
+#movies .theme-toggle {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 300ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+#movies .theme-toggle:hover {
+  background-color: var(--primary-color);
+  color: white;
+  transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+  #movies .container {
+    padding: 0 20px;
+  }
+
+  .movies__list {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  #movies .container {
+    padding: 0 16px;
+  }
+
+  .movies__list {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+    padding: 16px 0;
+  }
+}
+
+@media (max-width: 375px) {
+  #movies .container {
+    padding: 0 12px;
+  }
+
+  .movies__list {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+    padding: 12px 0;
+  }
 }
 
 .movies__header {
@@ -685,6 +818,7 @@ input:focus {
   justify-content: center;
   align-items: center;
   min-height: 200px;
+  width: 100%;
 }
 
 .movies__loading--spinner {
@@ -702,110 +836,12 @@ input:focus {
   }
 }
 
-.movies__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 32px;
-  padding: 20px 0;
-  opacity: 1;
-  transition: opacity 300ms ease;
-}
-
-.movies__list.fade {
-  opacity: 0;
-}
-
-.movie__card {
-  background-color: var(--background-color);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 300ms ease;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  opacity: 1;
-}
-
-.movie__card.fade {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.movie__card:hover {
-  transform: scale(1.05);
-}
-
-.movie__img--wrapper {
-  width: 100%;
-  padding-top: 150%;
-  position: relative;
-  overflow: hidden;
-  flex-shrink: 0;
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.movie__img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background-color: transparent;
-}
-
-.movie__info {
-  padding: 16px;
-  flex-grow: 1;
-}
-
-.movie__title {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text-color);
-  margin-bottom: 8px;
-}
-
-.movie__year {
-  font-size: 14px;
-  color: var(--text-color);
-  opacity: 0.7;
-  margin-bottom: 4px;
-}
-
-.movie__type {
-  font-size: 14px;
-  color: var(--primary-color);
-}
-
-.movie__rating {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 8px;
-}
-
-.movie__rating i {
-    color: #ffd700;
-    font-size: 14px;
-}
-
-.rating__value {
-    font-size: 14px;
-    color: var(--text-color);
-    margin-left: 4px;
-}
-
 .movies__no-results {
   text-align: center;
   color: var(--text-color);
   font-size: 20px;
   padding: 40px 0;
+  width: 100%;
 }
 
 /* Pagination Styles */
@@ -2182,4 +2218,78 @@ input:focus {
   .footer {
     padding-bottom: 16px;
   }
+}
+
+.filter__btns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.clear__filters {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+    .movies__container {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .movies__container {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .movie__title {
+        font-size: 16px;
+        margin-bottom: 6px;
+    }
+
+    .movie__year, .movie__type {
+        font-size: 12px;
+        margin-bottom: 3px;
+    }
+
+    .filter__btns {
+        gap: 8px;
+        padding: 12px;
+    }
+}
+
+/* iPhone SE and similar small screens */
+@media (max-width: 375px) {
+    .movies__container {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 12px;
+    }
+
+    .movie__img {
+        max-height: 300px;
+        width: 100%;
+        object-fit: contain;
+    }
+
+    .filter__btns {
+        gap: 6px;
+        padding: 10px;
+    }
+
+    .movie__title {
+        font-size: 15px;
+        line-height: 1.3;
+    }
+
+    .movie__year, .movie__type {
+        font-size: 12px;
+        line-height: 1.2;
+    }
 }

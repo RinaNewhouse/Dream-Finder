@@ -30,9 +30,15 @@ const searchButton = document.getElementById('searchButton');
 // Fetch movie details from OMDB API
 async function fetchMovieDetails(imdbID) {
     try {
+        console.log('Fetching details for movie:', imdbID);
         const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&i=${imdbID}&plot=short`);
         const data = await response.json();
-        console.log('API Response Plot:', data.Plot);
+        console.log('Movie details response:', data);
+        
+        if (data.Error) {
+            console.error('API Error:', data.Error);
+            return null;
+        }
         
         // Ensure proper punctuation for all plot summaries
         if (data.Plot) {
@@ -69,16 +75,19 @@ function shuffleArray(array) {
 
 // Initialize the page
 async function init() {
+    console.log('Initializing page with search query:', searchQuery);
     showLoading();
-    if (searchQuery.toLowerCase() === 'all movies') {
-        const popularSearches = [
-            'action', 'comedy', 'drama', 'thriller',
-            'adventure', 'sci-fi', 'romance', 'horror',
-            'fantasy', 'animation', 'mystery', 'crime'
-        ];
-        const allMovies = [];
-        
-        try {
+    
+    try {
+        if (searchQuery.toLowerCase() === 'all movies') {
+            const popularSearches = [
+                'action', 'comedy', 'drama', 'thriller',
+                'adventure', 'sci-fi', 'romance', 'horror',
+                'fantasy', 'animation', 'mystery', 'crime'
+            ];
+            const allMovies = [];
+            
+            console.log('Fetching popular movies...');
             const promises = popularSearches.map(term => fetchMovies(term));
             const results = await Promise.all(promises);
             
@@ -88,62 +97,82 @@ async function init() {
                 }
             });
             
+            console.log('Total movies found:', allMovies.length);
+            
             // Remove duplicates
             const uniqueMovies = [...new Map(allMovies.map(movie => [movie.imdbID, movie])).values()];
+            console.log('Unique movies:', uniqueMovies.length);
             
             // Fetch details for each movie
             const detailedMovies = await Promise.all(
                 uniqueMovies.map(async movie => {
                     const details = await fetchMovieDetails(movie.imdbID);
+                    if (!details) return null;
                     const rating = (Math.random() * 1.5 + 3.5).toFixed(1);
-                    // Ensure we have the correct year data
                     const year = details.Year || movie.Year;
                     return { ...movie, ...details, rating, Year: year };
                 })
-            );
+            ).then(movies => movies.filter(movie => movie !== null));
+            
+            console.log('Detailed movies:', detailedMovies.length);
             
             // Shuffle the movies array
             movies = shuffleArray(detailedMovies);
+        } else {
+            console.log('Fetching movies for search:', searchQuery);
+            const response = await fetchMovies(searchQuery);
+            const initialMovies = response.Search || [];
             
-        } catch (error) {
-            console.error('Error fetching all movies:', error);
-            movies = [];
+            console.log('Initial movies found:', initialMovies.length);
+            
+            // Fetch details for each movie
+            const detailedMovies = await Promise.all(
+                initialMovies.map(async movie => {
+                    const details = await fetchMovieDetails(movie.imdbID);
+                    if (!details) return null;
+                    const rating = (Math.random() * 1.5 + 3.5).toFixed(1);
+                    const year = details.Year || movie.Year;
+                    return { ...movie, ...details, rating, Year: year };
+                })
+            ).then(movies => movies.filter(movie => movie !== null));
+            
+            console.log('Detailed movies:', detailedMovies.length);
+            
+            // Shuffle the movies array
+            movies = shuffleArray(detailedMovies);
         }
-    } else {
-        const response = await fetchMovies(searchQuery);
-        const initialMovies = response.Search || [];
         
-        // Fetch details for each movie
-        const detailedMovies = await Promise.all(
-            initialMovies.map(async movie => {
-                const details = await fetchMovieDetails(movie.imdbID);
-                const rating = (Math.random() * 1.5 + 3.5).toFixed(1);
-                // Ensure we have the correct year data
-                const year = details.Year || movie.Year;
-                return { ...movie, ...details, rating, Year: year };
-            })
-        );
+        filteredMovies = [...movies];
+        updatePagination();
+        renderMovies();
         
-        // Shuffle the movies array
-        movies = shuffleArray(detailedMovies);
+        document.querySelector('.movies__header h2').textContent = 
+            searchQuery.toLowerCase() === 'all movies' 
+                ? 'All Movies' 
+                : `Search Results for "${searchQuery}"`;
+    } catch (error) {
+        console.error('Error in init:', error);
+        movies = [];
+        filteredMovies = [];
+        renderMovies();
+    } finally {
+        hideLoading();
     }
-    
-    filteredMovies = [...movies];
-    updatePagination();
-    hideLoading();
-    renderMovies();
-    
-    document.querySelector('.movies__header h2').textContent = 
-        searchQuery.toLowerCase() === 'all movies' 
-            ? 'All Movies' 
-            : `Search Results for "${searchQuery}"`;
 }
 
 // Fetch movies from OMDB API
 async function fetchMovies(query) {
     try {
-        const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&s=${query}`);
+        console.log('Fetching movies for query:', query);
+        const response = await fetch(`${BASE_URL}?apikey=${API_KEY}&s=${query}&type=movie`);
         const data = await response.json();
+        console.log('Search response:', data);
+        
+        if (data.Error) {
+            console.error('API Error:', data.Error);
+            return { Search: [] };
+        }
+        
         return data;
     } catch (error) {
         console.error('Error fetching movies:', error);
@@ -169,93 +198,83 @@ function renderMovies() {
                 <button class="movie__details-close">
                     <i class="fas fa-times"></i>
                 </button>
-                <h3 class="movie__details-title"></h3>
-                <div class="movie__summary">
-                    <h4>Summary</h4>
-                    <p></p>
-                </div>
-                <div class="movie__recommendations">
-                    <h4>You Would Like This Movie If:</h4>
-                    <ul></ul>
+                <h2 class="movie__details-title"></h2>
+                <div class="movie__details-content">
+                    <p class="movie__details-summary"></p>
+                    <div class="movie__details-recommendations">
+                        <h3>You might also like:</h3>
+                        <ul class="recommendations__list"></ul>
+                    </div>
                 </div>
             </div>
             <div class="movie__details-backdrop"></div>
         `;
         document.body.insertAdjacentHTML('beforeend', detailsHTML);
+
+        // Get references to the new elements
+        const details = document.querySelector('.movie__details');
+        const detailsTitle = document.querySelector('.movie__details-title');
+        const summaryText = document.querySelector('.movie__details-summary');
+        const recommendationsList = document.querySelector('.recommendations__list');
+        const closeBtn = document.querySelector('.movie__details-close');
+        const backdrop = document.querySelector('.movie__details-backdrop');
+
+        // Add event listeners for closing details
+        closeBtn.addEventListener('click', () => {
+            details.classList.remove('active');
+            backdrop.classList.remove('active');
+        });
+
+        backdrop.addEventListener('click', () => {
+            details.classList.remove('active');
+            backdrop.classList.remove('active');
+        });
     }
 
+    // Render movie cards
     moviesList.innerHTML = moviesToShow
-        .map(
-            (movie) => {
-                const starsHTML = generateStarRating(movie.rating);
-                
-                return `
-                <div class="movie__card" data-id="${movie.imdbID}">
-                    <div class="movie__img--wrapper">
-                        <img src="${movie.Poster !== 'N/A' ? movie.Poster : 'placeholder.jpg'}" 
-                             alt="${movie.Title}" 
-                             class="movie__img">
-                    </div>
-                    <div class="movie__info">
-                        <h3 class="movie__title">${movie.Title}</h3>
-                        <p class="movie__year">${movie.Year}</p>
-                        <p class="movie__type">${movie.Type.charAt(0).toUpperCase() + movie.Type.slice(1)}</p>
-                        <div class="movie__rating">
-                            ${starsHTML}
-                            <span class="rating__value">${movie.rating}</span>
-                        </div>
+        .map(movie => `
+            <div class="movie__card" data-id="${movie.imdbID}">
+                <img src="${movie.Poster}" alt="${movie.Title}" class="movie__poster">
+                <div class="movie__info">
+                    <h3 class="movie__title">${movie.Title}</h3>
+                    <p class="movie__year">${movie.Year}</p>
+                    <div class="movie__rating">
+                        ${generateStarRating(movie.rating)}
+                        <span>${movie.rating}</span>
                     </div>
                 </div>
-            `;
-            }
-        )
+            </div>
+        `)
         .join('');
-
-    const details = document.querySelector('.movie__details');
-    const backdrop = document.querySelector('.movie__details-backdrop');
-    const closeBtn = document.querySelector('.movie__details-close');
-    const detailsTitle = document.querySelector('.movie__details-title');
-    const summaryText = document.querySelector('.movie__summary p');
-    const recommendationsList = document.querySelector('.movie__recommendations ul');
 
     // Add click event listeners to movie cards
     document.querySelectorAll('.movie__card').forEach(card => {
-        card.addEventListener('click', function() {
-            const movieId = this.getAttribute('data-id');
+        card.addEventListener('click', () => {
+            const movieId = card.dataset.id;
             const movie = filteredMovies.find(m => m.imdbID === movieId);
             
             if (movie) {
+                const details = document.querySelector('.movie__details');
+                const detailsTitle = document.querySelector('.movie__details-title');
+                const summaryText = document.querySelector('.movie__details-summary');
+                const recommendationsList = document.querySelector('.recommendations__list');
+                const backdrop = document.querySelector('.movie__details-backdrop');
+
                 detailsTitle.textContent = movie.Title;
-                summaryText.textContent = movie.Plot ? movie.Plot.trim() : 'No summary available.';
-                recommendationsList.innerHTML = generateRecommendations(movie)
+                summaryText.textContent = movie.Plot;
+                
+                // Generate recommendations
+                const recommendations = generateRecommendations(movie);
+                recommendationsList.innerHTML = recommendations
                     .map(rec => `<li>${rec}</li>`)
                     .join('');
                 
-                details.classList.add('show');
-                backdrop.classList.add('show');
-                document.body.style.overflow = 'hidden';
+                // Show details popup
+                details.classList.add('active');
+                backdrop.classList.add('active');
             }
         });
-    });
-
-    // Add click event listener to close button
-    closeBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        details.classList.remove('show');
-        backdrop.classList.remove('show');
-        document.body.style.overflow = 'auto';
-    });
-
-    // Close popup when clicking on backdrop
-    backdrop.addEventListener('click', function() {
-        details.classList.remove('show');
-        backdrop.classList.remove('show');
-        document.body.style.overflow = 'auto';
-    });
-
-    // Prevent closing when clicking inside the movie details
-    details.addEventListener('click', function(e) {
-        e.stopPropagation();
     });
 }
 
@@ -626,5 +645,5 @@ function scrollToTop() {
     });
 }
 
-// Initialize the page
-init();
+// Call init when the page loads
+document.addEventListener('DOMContentLoaded', init);
