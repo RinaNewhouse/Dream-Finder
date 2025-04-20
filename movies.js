@@ -58,50 +58,17 @@ async function fetchMovieDetails(imdbID) {
     }
 }
 
+// Function to shuffle array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 // Initialize the page
 async function init() {
-    // Add movie details popup HTML to the page
-    const popupHTML = `
-        <div class="movie__details-backdrop"></div>
-        <div class="movie__details">
-            <button class="movie__details-close">
-                <i class="fas fa-times"></i>
-            </button>
-            <h3 class="movie__details-title"></h3>
-            <div class="movie__summary">
-                <h4>Summary</h4>
-                <p></p>
-            </div>
-            <div class="movie__recommendations">
-                <h4>You Would Like This Movie If:</h4>
-                <ul></ul>
-            </div>
-        </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', popupHTML);
-
-    // Add event listeners for closing the popup
-    const details = document.querySelector('.movie__details');
-    const backdrop = document.querySelector('.movie__details-backdrop');
-    const closeBtn = document.querySelector('.movie__details-close');
-
-    closeBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        details.classList.remove('show');
-        backdrop.classList.remove('show');
-        document.body.style.overflow = 'auto';
-    });
-
-    backdrop.addEventListener('click', function() {
-        details.classList.remove('show');
-        this.classList.remove('show');
-        document.body.style.overflow = 'auto';
-    });
-
-    details.addEventListener('click', function(e) {
-        e.stopPropagation();
-    });
-
     showLoading();
     if (searchQuery.toLowerCase() === 'all movies') {
         const popularSearches = [
@@ -135,7 +102,8 @@ async function init() {
                 })
             );
             
-            movies = detailedMovies;
+            // Shuffle the movies array
+            movies = shuffleArray(detailedMovies);
             
         } catch (error) {
             console.error('Error fetching all movies:', error);
@@ -156,7 +124,8 @@ async function init() {
             })
         );
         
-        movies = detailedMovies;
+        // Shuffle the movies array
+        movies = shuffleArray(detailedMovies);
     }
     
     filteredMovies = [...movies];
@@ -193,7 +162,28 @@ function renderMovies() {
     const endIndex = moviesPerPage === 'all' ? filteredMovies.length : startIndex + moviesPerPage;
     const moviesToShow = filteredMovies.slice(startIndex, endIndex);
 
-    // First, render the movie cards
+    // Create movie details popup elements if they don't exist
+    if (!document.querySelector('.movie__details')) {
+        const detailsHTML = `
+            <div class="movie__details">
+                <button class="movie__details-close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h3 class="movie__details-title"></h3>
+                <div class="movie__summary">
+                    <h4>Summary</h4>
+                    <p></p>
+                </div>
+                <div class="movie__recommendations">
+                    <h4>You Would Like This Movie If:</h4>
+                    <ul></ul>
+                </div>
+            </div>
+            <div class="movie__details-backdrop"></div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', detailsHTML);
+    }
+
     moviesList.innerHTML = moviesToShow
         .map(
             (movie) => {
@@ -221,27 +211,51 @@ function renderMovies() {
         )
         .join('');
 
+    const details = document.querySelector('.movie__details');
+    const backdrop = document.querySelector('.movie__details-backdrop');
+    const closeBtn = document.querySelector('.movie__details-close');
+    const detailsTitle = document.querySelector('.movie__details-title');
+    const summaryText = document.querySelector('.movie__summary p');
+    const recommendationsList = document.querySelector('.movie__recommendations ul');
+
     // Add click event listeners to movie cards
     document.querySelectorAll('.movie__card').forEach(card => {
         card.addEventListener('click', function() {
             const movieId = this.getAttribute('data-id');
             const movie = filteredMovies.find(m => m.imdbID === movieId);
+            
             if (movie) {
-                const details = document.querySelector('.movie__details');
-                const backdrop = document.querySelector('.movie__details-backdrop');
+                detailsTitle.textContent = movie.Title;
+                summaryText.textContent = movie.Plot ? movie.Plot.trim() : 'No summary available.';
+                recommendationsList.innerHTML = generateRecommendations(movie)
+                    .map(rec => `<li>${rec}</li>`)
+                    .join('');
                 
-                // Update popup content
-                document.querySelector('.movie__details-title').textContent = movie.Title;
-                document.querySelector('.movie__summary p').textContent = movie.Plot || 'No summary available.';
-                document.querySelector('.movie__recommendations ul').innerHTML = 
-                    generateRecommendations(movie).map(rec => `<li>${rec}</li>`).join('');
-                
-                // Show the popup
                 details.classList.add('show');
                 backdrop.classList.add('show');
                 document.body.style.overflow = 'hidden';
             }
         });
+    });
+
+    // Add click event listener to close button
+    closeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        details.classList.remove('show');
+        backdrop.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    });
+
+    // Close popup when clicking on backdrop
+    backdrop.addEventListener('click', function() {
+        details.classList.remove('show');
+        backdrop.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    });
+
+    // Prevent closing when clicking inside the movie details
+    details.addEventListener('click', function(e) {
+        e.stopPropagation();
     });
 }
 
@@ -572,16 +586,26 @@ menuBackdrop.addEventListener('click', (e) => {
 });
 
 // Clear all filters
-function clearFilters() {
-    genreFilter.value = 'all';
-    ratingFilter.value = 'all';
-    yearFilter.value = 'all';
+async function clearFilters() {
+    // Reset filter values and ensure default options are selected
+    genreFilter.selectedIndex = 0;  // First option is "All Genres"
+    ratingFilter.selectedIndex = 0;  // First option is "All Ratings"
+    yearFilter.selectedIndex = 0;  // First option is "All Years"
+    moviesPerPageSelect.selectedIndex = 0;  // First option is "Show 10"
     movieSearch.value = '';
-    moviesPerPageSelect.value = '10';
+    
+    // Reset movies and pagination
     currentPage = 1;
-    filteredMovies = [...movies];
-    renderMovies();
-    updatePagination();
+    moviesPerPage = 10;
+    
+    // Show loading state
+    showLoading();
+    
+    // Re-initialize with all movies
+    await init();
+    
+    // Update header text
+    document.querySelector('.movies__header h2').textContent = 'All Movies';
 }
 
 // Initialize the page
