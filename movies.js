@@ -375,8 +375,38 @@ async function performSearch(query) {
         const searchTerms = [];
         const queryLower = query.toLowerCase();
         
+        // Check if the query matches any of the genre filter options
+        const genreOptions = [
+            'action', 'adventure', 'animation', 'biography', 'comedy', 'crime',
+            'documentary', 'drama', 'family', 'fantasy', 'film-noir', 'history',
+            'horror', 'musical', 'mystery', 'romance', 'sci-fi', 'sport',
+            'thriller', 'war', 'western'
+        ];
+        
+        if (genreOptions.includes(queryLower)) {
+            // For genre searches, use the same initial search terms as the init function
+            const popularSearches = [
+                'action', 'comedy', 'drama', 'thriller',
+                'adventure', 'sci-fi', 'romance', 'horror',
+                'fantasy', 'animation', 'mystery', 'crime',
+                'documentary', 'biography', 'family', 'musical',
+                'sport', 'war', 'western'
+            ];
+            
+            // Add the specific genre we're searching for
+            searchTerms.push(query);
+            
+            // Also add some popular movies in that genre to get more results
+            if (queryLower === 'documentary') {
+                searchTerms.push('nature documentary', 'history documentary', 'science documentary');
+            } else if (queryLower === 'biography') {
+                searchTerms.push('biographical film', 'biopic');
+            } else if (queryLower === 'sci-fi') {
+                searchTerms.push('science fiction', 'space movie', 'futuristic');
+            }
+        }
         // Handle Disney searches
-        if (queryLower.includes('disney')) {
+        else if (queryLower.includes('disney')) {
             // Use specific search terms that work with OMDB
             searchTerms.push(
                 'disney',
@@ -406,7 +436,7 @@ async function performSearch(query) {
                 'onward',
                 'elemental'
             );
-        } 
+        }
         // Handle family-friendly searches
         else if (queryLower.includes('kid friendly') || queryLower.includes('family friendly') || 
                  queryLower.includes('family') || queryLower.includes('kids')) {
@@ -480,12 +510,17 @@ async function performSearch(query) {
             // List of words that indicate inappropriate content
             const excludeWords = [
                 'killed', 'murder', 'meathook', 'lesbian', 'gore', 'slaughter', 'massacre',
-                'documentary', 'behind the scenes', 'making of', 'untold', 'real',
+                'behind the scenes', 'making of', 'untold', 'real',
                 'untitled', 'project', 'development', 'announced', 'upcoming'
             ];
             
             if (excludeWords.some(word => title.includes(word))) {
                 return false;
+            }
+
+            // For genre searches, we'll filter by genre after fetching details
+            if (genreOptions.includes(queryLower)) {
+                return true;
             }
 
             // For Disney searches, ensure it's a Disney/Pixar film
@@ -502,7 +537,6 @@ async function performSearch(query) {
             // For family-friendly searches, ensure appropriate rating
             if (queryLower.includes('kid friendly') || queryLower.includes('family friendly') || 
                 queryLower.includes('family') || queryLower.includes('kids')) {
-                // First fetch the movie details to get the rating
                 return true; // We'll filter by rating after fetching details
             }
 
@@ -515,6 +549,17 @@ async function performSearch(query) {
                 try {
                     const details = await fetchMovieDetails(movie.imdbID);
                     if (!details) return null;
+                    
+                    // For genre searches, filter by genre after getting details
+                    if (genreOptions.includes(queryLower)) {
+                        // Normalize the genre string for comparison
+                        const movieGenres = details.Genre?.toLowerCase().split(', ').map(g => g.trim()) || [];
+                        
+                        // Check if any of the movie's genres match our search genre
+                        if (!movieGenres.some(genre => genre === queryLower)) {
+                            return null;
+                        }
+                    }
                     
                     // For family-friendly searches, filter by rating after getting details
                     if (queryLower.includes('kid friendly') || queryLower.includes('family friendly') || 
@@ -535,7 +580,11 @@ async function performSearch(query) {
         ).then(movies => movies.filter(movie => movie !== null));
 
         // Sort results
-        if (queryLower.includes('disney')) {
+        if (genreOptions.includes(queryLower)) {
+            // Sort by year (newer first) for genre searches
+            detailedMovies.sort((a, b) => parseInt(b.Year) - parseInt(a.Year));
+        }
+        else if (queryLower.includes('disney')) {
             detailedMovies.sort((a, b) => {
                 const titleA = a.Title.toLowerCase();
                 const titleB = b.Title.toLowerCase();
