@@ -10,12 +10,13 @@ function toggleTheme() {
     // Update theme toggle icon
     const themeIcon = document.querySelector('.theme-toggle i');
     if (themeIcon) {
-        themeIcon.className = `fa-regular ${newTheme === 'light' ? 'fa-moon' : 'fa-sun'}`;
+        themeIcon.className = newTheme === 'light' ? 'fa-regular fa-moon' : 'fa-regular fa-sun';
     }
 }
 
-// Set initial theme
-function initializeTheme() {
+// Initialize theme and add event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Set initial theme
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
     
@@ -24,7 +25,10 @@ function initializeTheme() {
     if (themeIcon) {
         themeIcon.className = `fa-regular ${savedTheme === 'light' ? 'fa-moon' : 'fa-sun'}`;
     }
-}
 
-// Initialize theme when DOM is loaded
-document.addEventListener('DOMContentLoaded', initializeTheme); 
+    // Add click event listener to theme toggle button
+    const themeToggle = document.querySelector('.theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+}); 
