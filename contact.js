@@ -3,7 +3,6 @@
     emailjs.init("XZiqXvXGUZ2WaKUne");
 })();
 
-// Contact Form Functions
 function openContactForm() {
     document.getElementById('contactModal').style.display = 'flex';
     document.body.style.overflow = 'hidden';
@@ -50,21 +49,10 @@ function handleContactSubmit(event) {
         });
 }
 
-// Event Listeners
-document.addEventListener('DOMContentLoaded', function() {
-    // Add submit handler to contact form
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', handleContactSubmit);
-    }
-
-    // Close modal when clicking outside
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
     const modal = document.getElementById('contactModal');
-    if (modal) {
-        modal.addEventListener('click', function(event) {
-            if (event.target === modal) {
-                closeContactForm();
-            }
-        });
+    if (event.target == modal) {
+        closeContactForm();
     }
 }); 

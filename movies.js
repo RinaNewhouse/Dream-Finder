@@ -293,22 +293,32 @@ function updatePagination() {
 }
 
 // Navigation functions
-function goToPage(page) {
+async function goToPage(page) {
+    const moviesList = document.querySelector('.movies__list');
+    moviesList.classList.add('fade');
+    
+    // Wait for fade out
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
     currentPage = page;
     renderMovies();
     updatePagination();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Wait for next frame to ensure new content is rendered
+    requestAnimationFrame(() => {
+        moviesList.classList.remove('fade');
+    });
 }
 
-function nextPage() {
+async function nextPage() {
     if (currentPage < totalPages) {
-        goToPage(currentPage + 1);
+        await goToPage(currentPage + 1);
     }
 }
 
-function prevPage() {
+async function prevPage() {
     if (currentPage > 1) {
-        goToPage(currentPage - 1);
+        await goToPage(currentPage - 1);
     }
 }
 
@@ -606,6 +616,14 @@ async function clearFilters() {
     
     // Update header text
     document.querySelector('.movies__header h2').textContent = 'All Movies';
+}
+
+// Add scroll to top functionality
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 }
 
 // Initialize the page

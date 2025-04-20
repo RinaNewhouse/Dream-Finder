@@ -1,4 +1,12 @@
-// Search Functions
+// Menu functionality
+function openMenu() {
+    document.body.classList.add('menu--open');
+}
+
+function closeMenu() {
+    document.body.classList.remove('menu--open');
+}
+
 function handleSearch(event) {
     event.preventDefault();
     const searchInput = document.getElementById('searchInput');
@@ -11,15 +19,8 @@ function handleSearch(event) {
     }
 }
 
-// Event Listeners
+// Add click handler for the search button
 document.addEventListener('DOMContentLoaded', function() {
-    // Add search form submit handler
-    const searchForm = document.getElementById('searchForm');
-    if (searchForm) {
-        searchForm.addEventListener('submit', handleSearch);
-    }
-
-    // Add click handler for the search button
     const searchButton = document.querySelector('.input__button');
     if (searchButton) {
         searchButton.addEventListener('click', handleSearch);
