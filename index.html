@@ -15,10 +15,12 @@
         }
     </style>
     <link rel="stylesheet" href="style.css">
-    <script src="theme.js"></script>
-    <script src="index.js"></script>
     <script src="https://kit.fontawesome.com/42d214a21a.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="theme.js" defer></script>
+    <script src="burger-menu.js" defer></script>
+    <script src="contact.js" defer></script>
+    <script src="index.js" defer></script>
 </head>
 
 <body>
@@ -29,7 +31,7 @@
             </video>
             <div class="overlay"></div>
         </div>
-        <nav>
+        <nav class="nav__home">
             <div class="nav__container">
                 <img class="logo" src="https://img.icons8.com/?size=100&id=jzQY4eVfPyZz&format=png&color=000000" alt="">
                 <ul class="nav__links">
@@ -46,8 +48,8 @@
                     </button>
                 </div>
                 <div class="menu__backdrop">
-                    <button class="btn__menu btn__menu--close" onclick="closeMenu()">
-                        <i class="fa-duotone fa-solid fa-xmark"></i>
+                    <button class="btn__menu--close" onclick="closeMenu()">
+                        <i class="fas fa-times"></i>
                     </button>
                     <ul class="menu__links">
                         <li class="menu__list">
@@ -72,7 +74,7 @@
             </div>
         </header>
         <div class="input__wrapper">
-            <form id="searchForm" onsubmit="handleSearch(event)">
+            <form id="searchForm">
                 <input 
                     type="text" 
                     id="searchInput" 
@@ -96,7 +98,7 @@
                 <i class="fas fa-times"></i>
             </button>
             <h2>Contact Us</h2>
-            <form id="contactForm" onsubmit="handleContactSubmit(event)">
+            <form id="contactForm">
                 <div class="form__group">
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" required>
@@ -114,10 +116,6 @@
         </div>
     </div>
 
-    <div>
-        <!-- Additional content can be added here -->
-    </div>
-
     <footer class="footer">
         <div class="footer__content">
             <div class="footer__info">
@@ -126,109 +124,5 @@
             </div>
         </div>
     </footer>
-
-    <script>
-        // Initialize EmailJS with your public key
-        (function() {
-            emailjs.init("XZiqXvXGUZ2WaKUne");
-        })();
-
-        function openMenu() {
-            const backdrop = document.querySelector('.menu__backdrop');
-            backdrop.classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeMenu() {
-            const backdrop = document.querySelector('.menu__backdrop');
-            backdrop.classList.remove('show');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Close menu when clicking outside
-        window.onclick = function(event) {
-            const menu = document.querySelector('.menu__backdrop');
-            if (event.target === menu) {
-                closeMenu();
-            }
-        }
-
-        function handleSearch(event) {
-            event.preventDefault();
-            const searchInput = document.getElementById('searchInput');
-            const searchQuery = searchInput.value.trim();
-            
-            if (searchQuery) {
-                window.location.href = `movies.html?search=${encodeURIComponent(searchQuery)}`;
-            } else {
-                searchInput.focus();
-            }
-        }
-
-        // Add click handler for the search button
-        document.querySelector('.input__button').addEventListener('click', handleSearch);
-
-        // Contact Form Functions
-        function openContactForm() {
-            document.getElementById('contactModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeContactForm() {
-            document.getElementById('contactModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        function handleContactSubmit(event) {
-            event.preventDefault();
-            
-            // Get form data
-            const form = event.target;
-            const formData = {
-                from_name: form.name.value,
-                from_email: form.email.value,
-                message: form.message.value
-            };
-
-            // Show loading state
-            const submitBtn = form.querySelector('.contact__submit-btn');
-            submitBtn.textContent = 'Sending...';
-            submitBtn.disabled = true;
-
-            // Send email using EmailJS
-            emailjs.send('service_7xmu46e', 'template_s0uio9z', formData)
-                .then(() => {
-                    // Show success message
-                    alert('Thank you for your message! We will get back to you soon.');
-                    closeContactForm();
-                    form.reset();
-                })
-                .catch((error) => {
-                    // Show error message
-                    alert('Sorry, there was an error sending your message. Please try again later.');
-                    console.error('Email sending error:', error);
-                })
-                .finally(() => {
-                    // Reset button state
-                    submitBtn.textContent = 'Send Message';
-                    submitBtn.disabled = false;
-                });
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('contactModal');
-            if (event.target == modal) {
-                closeContactForm();
-            }
-        }
-
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-    </script>
 </body>
 </html>
