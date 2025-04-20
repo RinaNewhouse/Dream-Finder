@@ -464,12 +464,12 @@ h2 {
 }
 
 .movies__list {
+  padding: 0 32px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 32px;
-  padding: 24px 0;
-  width: 100%;
-  min-height: 200px;
+  margin-top: 32px;
+  transition: opacity 0.3s ease;
 }
 
 .movie__card {
@@ -676,22 +676,22 @@ h2 {
 }
 
 .movies__filters-container {
+  padding: 0 32px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 32px;
+  align-items: center;
+  gap: 12px;
   width: 100%;
+  max-width: 100%;
 }
 
 .movies__search {
-  flex: 1;
-  min-width: 300px;
+  width: 300px;
 }
 
 .movies__filters {
   display: flex;
   gap: 12px;
-  flex-wrap: nowrap;
+  margin-left: auto;
 }
 
 .filter__select {
@@ -1224,10 +1224,24 @@ h2 {
   }
 }
 
-/* 1280PX */
-@media (max-width: 1280px) {
+/* 1200PX */
+@media (max-width: 1200px) {
+  .movies__search {
+    width: 100%;
+  }
+
+  .movies__filters {
+    width: 100%;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .movies__header {
+    gap: 16px;
+  }
+
   .movies__filters-container {
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 20px;
   }
 
@@ -1237,24 +1251,6 @@ h2 {
 
   .clear-filters-btn {
     flex: 1;
-  }
-}
-
-/* 1200PX */
-@media (max-width: 1200px) {
-  .movies__search {
-    width: 100%;
-  }
-
-  .movies__filters {
-    width: 100%;
-    order: 2;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .movies__header {
-    gap: 16px;
   }
 }
 
@@ -2451,4 +2447,11 @@ input:focus {
   font-weight: bold;
   color: var(--primary-color);
   font-size: 18px;
+}
+
+@media (max-width: 1280px) {
+  .movies__list,
+  .movies__filters-container {
+    padding: 0 24px;
+  }
 }
