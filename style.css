@@ -257,6 +257,7 @@ img {
 
 a {
   text-decoration: none;
+  color: var(--text-color);
 }
 
 ul {
@@ -501,14 +502,14 @@ h2 {
 
 .movie__card {
   position: relative;
-  cursor: pointer;
+    cursor: pointer;
   transition: all 300ms ease;
   border-radius: 4px;
   overflow: hidden;
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
   height: 100%;
-    background-color: var(--background-color);
+  background-color: var(--background-color);
 }
 
 .movie__card:hover {
@@ -517,7 +518,7 @@ h2 {
 }
 
 .movie__img--wrapper {
-    width: 100%;
+  width: 100%;
   padding-top: 150%; /* 2:3 aspect ratio for movie posters */
   position: relative;
   overflow: hidden;
@@ -526,10 +527,10 @@ h2 {
 
 .movie__img {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   object-fit: contain; /* Changed from cover to contain */
   padding: 0;
   background-color: rgba(0, 0, 0, 0.05);
@@ -583,8 +584,8 @@ h2 {
 
 .movie__rating {
   margin-top: 8px;
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
   gap: 2px;
 }
 
@@ -609,7 +610,7 @@ h2 {
 .movie__rating span {
   font-size: 14px;
   margin-left: 6px;
-  color: var(--text-color);
+    color: var(--text-color);
   line-height: 1;
 }
 
@@ -622,7 +623,7 @@ h2 {
   cursor: pointer;
   padding: 8px;
   border-radius: 50%;
-  transition: all 300ms ease;
+    transition: all 300ms ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -692,20 +693,20 @@ h2 {
 }
 
 .movies__header {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 48px 0;
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .movies__header h2 {
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--text-color);
-    margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0;
 }
 
 .movies__filters-container {
@@ -737,11 +738,11 @@ h2 {
 
 .filter__select {
   padding: 8px 16px;
-  border-radius: 8px;
+    border-radius: 8px;
   border: 2px solid var(--primary-color);
   background-color: rgba(255, 255, 255, 0.1);
   color: var(--text-color);
-    font-size: 16px;
+  font-size: 16px;
   cursor: pointer;
   transition: all 300ms ease;
   min-width: 120px;
@@ -759,8 +760,8 @@ h2 {
 }
 
 [data-theme="light"] .filter__select:hover {
-  background-color: var(--primary-color);
-  color: white;
+    background-color: var(--primary-color);
+    color: white;
 }
 
 .movies__loading {
@@ -789,7 +790,7 @@ h2 {
 .movies__no-results {
   text-align: center;
   color: var(--text-color);
-    font-size: 20px;
+  font-size: 20px;
   padding: 40px 0;
   width: 100%;
 }
@@ -807,17 +808,17 @@ h2 {
 
 .pagination__btn {
   background-color: var(--primary-color);
-  color: white;
+    color: white;
   border: none;
   padding: 12px 24px;
   border-radius: 50px;
   font-size: 16px;
   font-weight: 600;
-  cursor: pointer;
+    cursor: pointer;
     display: flex;
     align-items: center;
   gap: 8px;
-  transition: all 300ms ease;
+    transition: all 300ms ease;
 }
 
 .pagination__btn:hover:not(:disabled) {
@@ -831,9 +832,9 @@ h2 {
 }
 
 .pagination__numbers {
-  display: flex;
+        display: flex;
   gap: 8px;
-  align-items: center;
+        align-items: center;
 }
 
 .page__number {
@@ -870,12 +871,12 @@ h2 {
 }
 
 .search__wrapper {
-  position: relative;
+    position: relative;
   width: 100%;
 }
 
 .search__input {
-  width: 100%;
+    width: 100%;
   padding: 12px 80px 12px 20px;
   height: 45px;
   font-size: 16px;
@@ -883,7 +884,7 @@ h2 {
   border: 2px solid var(--primary-color);
   border-radius: 8px;
   color: var(--text-color);
-  transition: all 300ms ease;
+    transition: all 300ms ease;
   text-align: left;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -892,7 +893,7 @@ h2 {
 
 .search__input::placeholder {
   color: var(--placeholder-color);
-  opacity: 0.8;
+    opacity: 0.8;
   text-align: left;
 }
 
@@ -976,7 +977,7 @@ h2 {
 }
 
 .landing__info--subheading {
-    font-size: 24px;
+  font-size: 24px;
   color: var(--paragraph-color);
   margin-bottom: 40px;
   transition: color var(--transition);
@@ -1043,8 +1044,8 @@ h2 {
 }
 
 .form__group {
-  margin-bottom: 24px;
-}
+    margin-bottom: 24px;
+  }
 
 .form__group label {
   display: block;
@@ -1079,7 +1080,7 @@ h2 {
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
+    font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 300ms ease;
@@ -1133,13 +1134,13 @@ h2 {
   padding: 8px 16px;
   border-radius: 8px;
   border: 2px solid var(--primary-color);
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.1);
   color: var(--text-color);
   font-size: 16px;
   cursor: pointer;
   transition: all 300ms ease;
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
   gap: 8px;
   min-width: 120px;
   max-width: 160px;
@@ -1266,25 +1267,25 @@ h2 {
 
 /* 1200PX */
 @media (max-width: 1200px) {
-.movies__search {
+  .movies__search {
     width: 100%;
-}
+  }
 
-.movies__filters {
+  .movies__filters {
     width: 100%;
     margin-left: 0;
     gap: 12px;
     flex-wrap: wrap;
-}
+  }
 
   .movies__header {
     padding: 24px 24px;
   }
 
-    .movies__filters-container {
+  .movies__filters-container {
     flex-wrap: wrap;
-        gap: 20px;
-    }
+    gap: 20px;
+  }
 
   .filter__select,
   .clear-filters-btn {
@@ -1298,7 +1299,6 @@ h2 {
 @media (max-width: 992px) {
   .movies__header h2 {
     font-size: 26px;
-    margin-bottom: 16px;
   }
 
   .filter__select,
@@ -1344,7 +1344,7 @@ h2 {
 
   .nav__buttons {
     display: flex;
-  align-items: center;
+    align-items: center;
     gap: 12px;
     margin-left: 8px;
   }
@@ -1422,7 +1422,7 @@ h2 {
     flex-wrap: wrap;
     gap: 16px;
   }
-  
+
   .pagination__numbers {
     order: -1;
     width: 100%;
@@ -1513,15 +1513,15 @@ h2 {
 
 /* 720PX */
 @media (max-width: 720px) {
-  .movies__filters {
-    flex-wrap: wrap;
-    gap: 12px;
-  }
+    .movies__filters {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
 
   .filter__select,
   .clear-filters-btn {
-    flex: 1;
-    min-width: calc(50% - 6px);
+        flex: 1;
+        min-width: calc(50% - 6px);
   }
 }
 
@@ -1612,7 +1612,7 @@ h2 {
   }
 
   .input__button i {
-    font-size: 18px;
+  font-size: 18px;
   }
 }
 
@@ -1622,7 +1622,7 @@ h2 {
     background: none;
     border: none;
     outline: none;
-    color: var(--text-color);
+  color: var(--text-color);
     font-size: 24px;
     cursor: pointer;
     align-self: flex-end;
@@ -1632,8 +1632,8 @@ h2 {
 
   .btn__menu--close:hover {
     transform: rotate(90deg);
-    color: var(--primary-color);
-  }
+  color: var(--primary-color);
+}
 
   .header__description {
     padding: 20px 16px 0;
@@ -1652,18 +1652,18 @@ h2 {
   }
 
   .movies__header h2 {
-    font-size: 20px;
+  font-size: 20px;
     margin-bottom: 16px;
-  }
+}
 
   .movie__details-info {
     font-size: 15px;
   }
-
+  
   .movies__search {
     margin-bottom: 16px;
   }
-
+  
   .movies__filters {
     gap: 8px;
   }
@@ -1817,7 +1817,7 @@ h2 {
   }
 
   .btn__menu {
-  font-size: 16px;
+    font-size: 16px;
   }
 }
 
@@ -1845,7 +1845,7 @@ h2 {
   input {
     padding: 0 32px 0 8px;
     font-size: 11px;
-  height: 40px;
+    height: 40px;
   }
 
   input::placeholder {
@@ -2054,7 +2054,7 @@ h2 {
   .movie__info p,
   .movie__recommendations li {
   font-size: 16px;
-}
+  }
 
   .movie__summary {
     max-height: 180px;
@@ -2146,12 +2146,12 @@ h2 {
     width: 92%;
     margin-top: 14px;
     margin-bottom: 18px;
-  }
+}
 
-    .see-all-btn {
+.see-all-btn {
     margin: 14px auto 18px;
-        padding: 10px 24px;
-        font-size: 14px;
+    padding: 10px 24px;
+    font-size: 14px;
   }
 
   .footer {
@@ -2315,7 +2315,7 @@ h2 {
     cursor: pointer;
   align-self: flex-end;
   padding: 8px;
-  transition: all 300ms ease;
+    transition: all 300ms ease;
 }
 
 .btn__menu--close:hover {

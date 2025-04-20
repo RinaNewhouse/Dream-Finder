@@ -307,7 +307,7 @@ function filterMovies() {
             (movie.Rated && movie.Rated.toUpperCase() === selectedMovieRating.toUpperCase());
 
         // Star rating filter
-        const movieRating = parseFloat(movie.imdbRating);
+        const movieRating = parseFloat(movie.rating); // Use the generated rating instead of imdbRating
         let ratingMatch = true;
         
         if (selectedRating !== 'all') {
@@ -499,7 +499,7 @@ async function performSearch(query) {
         // Filter and sort results
         const searchWords = queryLower.split(' ');
         let initialMovies = allResults.filter(movie => {
-            const title = movie.Title.toLowerCase();
+                const title = movie.Title.toLowerCase();
             const year = parseInt(movie.Year);
             
             // Filter out inappropriate content and unreleased movies
@@ -540,12 +540,12 @@ async function performSearch(query) {
                 return true; // We'll filter by rating after fetching details
             }
 
-            return searchWords.some(word => title.includes(word));
-        });
-
-        // Fetch details for each movie
-        const detailedMovies = await Promise.all(
-            initialMovies.map(async movie => {
+                return searchWords.some(word => title.includes(word));
+            });
+            
+            // Fetch details for each movie
+            const detailedMovies = await Promise.all(
+                initialMovies.map(async movie => {
                 try {
                     const details = await fetchMovieDetails(movie.imdbID);
                     if (!details) return null;
@@ -616,14 +616,14 @@ async function performSearch(query) {
                 return parseInt(b.Year) - parseInt(a.Year);
             });
         }
-        
-        movies = detailedMovies;
-        filteredMovies = [...movies];
-        currentPage = 1;
-        updatePagination();
-        renderMovies();
-        
-        document.querySelector('.movies__header h2').textContent = `Search Results for "${query}"`;
+            
+            movies = detailedMovies;
+            filteredMovies = [...movies];
+            currentPage = 1;
+            updatePagination();
+            renderMovies();
+            
+            document.querySelector('.movies__header h2').textContent = `Search Results for "${query}"`;
     } catch (error) {
         console.error('Error searching movies:', error);
         movies = [];
@@ -788,30 +788,6 @@ menuBackdrop.addEventListener('click', (e) => {
         closeMenu();
     }
 });
-
-// Clear all filters
-async function clearFilters() {
-    // Reset filter values and ensure default options are selected
-    genreFilter.selectedIndex = 0;  // First option is "All Genres"
-    movieRatingFilter.selectedIndex = 0;  // First option is "All Ratings"
-    ratingFilter.selectedIndex = 0;  // First option is "All Ratings"
-    yearFilter.selectedIndex = 0;  // First option is "All Years"
-    moviesPerPageSelect.selectedIndex = 0;  // First option is "Show 10"
-    movieSearch.value = '';
-    
-    // Reset movies and pagination
-    currentPage = 1;
-    moviesPerPage = 10;
-    
-    // Show loading state
-    showLoading();
-    
-    // Re-initialize with all movies
-    await init();
-    
-    // Update header text
-    document.querySelector('.movies__header h2').textContent = 'All Movies';
-}
 
 // Add scroll to top functionality
 function scrollToTop() {
