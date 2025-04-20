@@ -470,10 +470,9 @@ h2 {
   position: relative;
   min-height: calc(100vh - 100px);
   background-color: var(--background-color);
-  padding-top: 120px;
   transition: background-color var(--transition);
   flex: 1;
-    width: 100%;
+  width: 100%;
 }
 
 #movies .container {
@@ -481,6 +480,7 @@ h2 {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 24px;
+  margin-top: 72px;
 }
 
 #movies .row {
@@ -692,13 +692,20 @@ h2 {
 }
 
 .movies__header {
-    margin-bottom: 24px;
-  }
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 0;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
 .movies__header h2 {
-  font-size: 32px;
-  text-align: left;
-  color: var(--text-color);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0;
 }
 
 .movies__filters-container {
@@ -1271,7 +1278,7 @@ h2 {
 }
 
   .movies__header {
-    gap: 16px;
+    padding: 24px 24px;
   }
 
     .movies__filters-container {
@@ -1385,11 +1392,11 @@ h2 {
   }
 
   .movies__header {
-    gap: 14px;
+    padding: 24px 16px;
   }
 
   .movies__header h2 {
-    font-size: 28px;
+    font-size: 24px;
     margin-bottom: 20px;
   }
 
@@ -1641,11 +1648,11 @@ h2 {
   }
 
   .movies__header {
-    gap: 10px;
+    padding: 16px;
   }
 
   .movies__header h2 {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 16px;
   }
 
