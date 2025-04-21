@@ -195,11 +195,11 @@ h2.animate-text {
 }
 
 element.style {
-    animation-duration: 1500ms;
-    transition-duration: 1500ms;
-    animation-delay: 300ms;
-    transition-delay: 300ms;
-    width: 100%;
+  animation-duration: 1500ms;
+  transition-duration: 1500ms;
+  animation-delay: 300ms;
+  transition-delay: 300ms;
+  width: 100%;
 }
 
 html {
@@ -290,7 +290,7 @@ button:active {
 .purple {
   color: #7342d6 !important;
   text-shadow: 2px 2px 4px rgba(45, 45, 63, 0.25),
-               0 0 15px rgba(115, 66, 214, 0.2);
+    0 0 15px rgba(115, 66, 214, 0.2);
 }
 
 .header__description {
@@ -344,26 +344,26 @@ h2 {
 }
 
 .nav__links {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-left: auto;
   height: 100%;
 }
 
 .nav__link {
-    font-size: 18px;
+  font-size: 18px;
   position: relative;
-    color: var(--text-color);
+  color: var(--text-color);
   font-weight: 500;
   padding: 8px 0;
   transition: color 300ms ease;
   text-decoration: none;
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
   height: 100%;
 }
 
@@ -389,19 +389,19 @@ h2 {
 
 /* Primary Link (Contact Button) */
 .nav__link--primary {
-    background-color: var(--primary-color);
-    color: white !important;
-    padding: 12px 32px;
-    border-radius: 50px;
+  background-color: var(--primary-color);
+  color: white !important;
+  padding: 12px 32px;
+  border-radius: 50px;
   transition: all 300ms ease !important;
-    font-size: 18px;
-    font-weight: 600;
-    height: auto;
+  font-size: 18px;
+  font-weight: 600;
+  height: auto;
 }
 
 .nav__link--primary:hover {
-    background-color: var(--primary-color-hover);
-    transform: translateY(-2px);
+  background-color: var(--primary-color-hover);
+  transform: translateY(-2px);
   text-decoration: none;
 }
 
@@ -412,7 +412,7 @@ h2 {
 .nav__buttons {
   display: flex;
   align-items: center;
-    gap: 8px;
+  gap: 8px;
   margin-left: 16px;
   opacity: 0;
   animation: fadeInUp 0.6s ease forwards;
@@ -425,14 +425,14 @@ h2 {
   display: none; /* Hide by default on larger screens */
   align-items: center;
   justify-content: center;
-    background: none;
-    border: none;
-    color: var(--text-color);
-    font-size: 1.25rem;
-    cursor: pointer;
-    padding: 8px;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 8px;
   z-index: 99;
-    border-radius: 50%;
+  border-radius: 50%;
   transition: all 300ms ease;
   width: 40px;
   height: 40px;
@@ -445,16 +445,16 @@ h2 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .theme-toggle:hover,
 .btn__menu:hover {
-    background-color: var(--primary-color);
-    color: white;
-    transform: translateY(-2px);
+  background-color: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
 }
 
 [data-theme="light"] .logo {
@@ -502,7 +502,7 @@ h2 {
 
 .movie__card {
   position: relative;
-    cursor: pointer;
+  cursor: pointer;
   transition: all 300ms ease;
   border-radius: 4px;
   overflow: hidden;
@@ -527,10 +527,10 @@ h2 {
 
 .movie__img {
   position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   object-fit: contain; /* Changed from cover to contain */
   padding: 0;
   background-color: rgba(0, 0, 0, 0.05);
@@ -538,7 +538,7 @@ h2 {
 
 .movie__info {
   padding: 12px;
-    display: flex;
+  display: flex;
   flex-direction: column;
   flex: 1;
   min-height: 120px;
@@ -584,9 +584,9 @@ h2 {
 
 .movie__rating {
   margin-top: 8px;
-    display: flex;
-    align-items: center;
-  gap: 2px;
+  display: flex;
+  align-items: center;
+  gap: 0px;
 }
 
 .movie__rating i {
@@ -610,7 +610,7 @@ h2 {
 .movie__rating span {
   font-size: 14px;
   margin-left: 6px;
-    color: var(--text-color);
+  color: var(--text-color);
   line-height: 1;
 }
 
@@ -623,7 +623,7 @@ h2 {
   cursor: pointer;
   padding: 8px;
   border-radius: 50%;
-    transition: all 300ms ease;
+  transition: all 300ms ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -697,7 +697,7 @@ h2 {
   flex-direction: column;
   gap: 16px;
   padding: 48px 0;
-    width: 100%;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -738,7 +738,7 @@ h2 {
 
 .filter__select {
   padding: 8px 16px;
-    border-radius: 8px;
+  border-radius: 8px;
   border: 2px solid var(--primary-color);
   background-color: rgba(255, 255, 255, 0.1);
   color: var(--text-color);
@@ -760,8 +760,8 @@ h2 {
 }
 
 [data-theme="light"] .filter__select:hover {
-    background-color: var(--primary-color);
-    color: white;
+  background-color: var(--primary-color);
+  color: white;
 }
 
 .movies__loading {
@@ -808,17 +808,17 @@ h2 {
 
 .pagination__btn {
   background-color: var(--primary-color);
-    color: white;
+  color: white;
   border: none;
   padding: 12px 24px;
   border-radius: 50px;
   font-size: 16px;
   font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
   gap: 8px;
-    transition: all 300ms ease;
+  transition: all 300ms ease;
 }
 
 .pagination__btn:hover:not(:disabled) {
@@ -832,9 +832,9 @@ h2 {
 }
 
 .pagination__numbers {
-        display: flex;
+  display: flex;
   gap: 8px;
-        align-items: center;
+  align-items: center;
 }
 
 .page__number {
@@ -871,12 +871,12 @@ h2 {
 }
 
 .search__wrapper {
-    position: relative;
+  position: relative;
   width: 100%;
 }
 
 .search__input {
-    width: 100%;
+  width: 100%;
   padding: 12px 80px 12px 20px;
   height: 45px;
   font-size: 16px;
@@ -884,7 +884,7 @@ h2 {
   border: 2px solid var(--primary-color);
   border-radius: 8px;
   color: var(--text-color);
-    transition: all 300ms ease;
+  transition: all 300ms ease;
   text-align: left;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -893,7 +893,7 @@ h2 {
 
 .search__input::placeholder {
   color: var(--placeholder-color);
-    opacity: 0.8;
+  opacity: 0.8;
   text-align: left;
 }
 
@@ -1044,8 +1044,8 @@ h2 {
 }
 
 .form__group {
-    margin-bottom: 24px;
-  }
+  margin-bottom: 24px;
+}
 
 .form__group label {
   display: block;
@@ -1062,7 +1062,7 @@ h2 {
   border-radius: 8px;
   background-color: var(--background-color);
   color: var(--text-color);
-    font-size: 16px;
+  font-size: 16px;
   transition: all 300ms ease;
 }
 
@@ -1080,7 +1080,7 @@ h2 {
   color: white;
   border: none;
   border-radius: 8px;
-    font-size: 16px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 300ms ease;
@@ -1139,8 +1139,8 @@ h2 {
   font-size: 16px;
   cursor: pointer;
   transition: all 300ms ease;
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
   gap: 8px;
   min-width: 120px;
   max-width: 160px;
@@ -1154,7 +1154,7 @@ h2 {
 }
 
 .clear-filters-btn i {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 /* Footer Styles */
@@ -1513,15 +1513,15 @@ h2 {
 
 /* 720PX */
 @media (max-width: 720px) {
-    .movies__filters {
-        flex-wrap: wrap;
-        gap: 12px;
-    }
+  .movies__filters {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 
   .filter__select,
   .clear-filters-btn {
-        flex: 1;
-        min-width: calc(50% - 6px);
+    flex: 1;
+    min-width: calc(50% - 6px);
   }
 }
 
@@ -1612,7 +1612,7 @@ h2 {
   }
 
   .input__button i {
-  font-size: 18px;
+    font-size: 18px;
   }
 }
 
@@ -1622,7 +1622,7 @@ h2 {
     background: none;
     border: none;
     outline: none;
-  color: var(--text-color);
+    color: var(--text-color);
     font-size: 24px;
     cursor: pointer;
     align-self: flex-end;
@@ -1632,8 +1632,8 @@ h2 {
 
   .btn__menu--close:hover {
     transform: rotate(90deg);
-  color: var(--primary-color);
-}
+    color: var(--primary-color);
+  }
 
   .header__description {
     padding: 20px 16px 0;
@@ -1652,18 +1652,18 @@ h2 {
   }
 
   .movies__header h2 {
-  font-size: 20px;
+    font-size: 20px;
     margin-bottom: 16px;
-}
+  }
 
   .movie__details-info {
     font-size: 15px;
   }
-  
+
   .movies__search {
     margin-bottom: 16px;
   }
-  
+
   .movies__filters {
     gap: 8px;
   }
@@ -1740,6 +1740,16 @@ h2 {
 
   .input__button {
     min-width: 60px;
+  }
+
+  .movie__rating i {
+    transform: scale(0.8);
+    display: inline-block;
+    margin: 0;
+  }
+
+  .movie__rating i.fa-star-half-alt {
+    transform: scale(0.8);
   }
 }
 /* 360PX */
@@ -2049,7 +2059,7 @@ h2 {
 @media (max-width: 768px) {
   .movie__info p,
   .movie__recommendations li {
-  font-size: 16px;
+    font-size: 16px;
   }
 
   .movie__summary {
@@ -2142,9 +2152,9 @@ h2 {
     width: 92%;
     margin-top: 14px;
     margin-bottom: 18px;
-}
+  }
 
-.see-all-btn {
+  .see-all-btn {
     margin: 14px auto 18px;
     padding: 10px 24px;
     font-size: 14px;
@@ -2233,14 +2243,14 @@ h2 {
 
 /* ANIMATIONS */
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
+  from {
+    opacity: 0;
     transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-text {
@@ -2268,11 +2278,11 @@ h2 {
   position: fixed;
   top: 0;
   left: 0;
-    width: 100%;
+  width: 100%;
   height: 100%;
   visibility: hidden;
   opacity: 0;
-    transition: all 300ms ease;
+  transition: all 300ms ease;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 100;
   backdrop-filter: blur(4px);
@@ -2304,14 +2314,14 @@ h2 {
 
 .btn__menu--close {
   background: none;
-    border: none;
+  border: none;
   outline: none;
   color: var(--text-color);
   font-size: 24px;
-    cursor: pointer;
+  cursor: pointer;
   align-self: flex-end;
   padding: 8px;
-    transition: all 300ms ease;
+  transition: all 300ms ease;
 }
 
 .btn__menu--close:hover {
@@ -2383,7 +2393,7 @@ input:focus {
 
 .input__button i {
   color: white;
-        font-size: 20px;
+  font-size: 20px;
 }
 
 .input__button:hover {
@@ -2459,7 +2469,7 @@ input:focus {
 
 .theme-toggle:hover {
   background-color: var(--primary-color);
-    color: white;
+  color: white;
   transform: translateY(-2px);
 }
 
