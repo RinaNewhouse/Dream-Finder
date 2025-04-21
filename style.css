@@ -1668,12 +1668,6 @@ h2 {
     gap: 8px;
   }
 
-  .filter__select,
-  .clear-filters-btn {
-    min-width: 100%;
-    flex: 0 1 100%;
-  }
-
   .search__input {
     padding: 0 65px 0 16px;
     height: 45px;
@@ -1767,8 +1761,10 @@ h2 {
     gap: 12px;
   }
 
-  .filter__select {
-    width: 100%;
+  .filter__select,
+  .clear-filters-btn {
+    min-width: 100%;
+    flex: 0 1 100%;
   }
 }
 
